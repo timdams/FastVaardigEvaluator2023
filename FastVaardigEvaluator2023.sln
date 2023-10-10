@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastEvalCL", "FastEvalCL\FastEvalCL.csproj", "{1788BD00-B96F-4442-9572-D2687F133609}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastEvalCL", "FastEvalCL\FastEvalCL.csproj", "{1788BD00-B96F-4442-9572-D2687F133609}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTester", "ConsoleTester\ConsoleTester.csproj", "{61E8DCA4-A65B-443B-9520-2960DCBCCC08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTester", "ConsoleTester\ConsoleTester.csproj", "{61E8DCA4-A65B-443B-9520-2960DCBCCC08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeLifeEasierWPF", "MakeLifeEasierWPF\MakeLifeEasierWPF.csproj", "{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{61E8DCA4-A65B-443B-9520-2960DCBCCC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61E8DCA4-A65B-443B-9520-2960DCBCCC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61E8DCA4-A65B-443B-9520-2960DCBCCC08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
