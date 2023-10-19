@@ -34,5 +34,17 @@ namespace MakeLifeEasierWPF.Properties {
                 this["LastPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int RegionAmount {
+            get {
+                return ((int)(this["RegionAmount"]));
+            }
+            set {
+                this["RegionAmount"] = value;
+            }
+        }
     }
 }

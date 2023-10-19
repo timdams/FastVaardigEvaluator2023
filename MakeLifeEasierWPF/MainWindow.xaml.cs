@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FastEvalCL;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MakeLifeEasierWPF
 {
@@ -22,8 +12,10 @@ namespace MakeLifeEasierWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Settings AllSettings { get; set; }
         public MainWindow()
         {
+
             InitializeComponent();
         }
 
@@ -32,35 +24,38 @@ namespace MakeLifeEasierWPF
 
             Ookii.Dialogs.Wpf.VistaFolderBrowserDialog dlg = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
             //TODO: werkt niet?
-            dlg.SelectedPath = Properties.Settings.Default.LastPath;
-       
+            dlg.SelectedPath = AllSettings.LastSelectedFolder;
+
             if (dlg.ShowDialog() == true)
             {
-                Properties.Settings.Default.LastPath = dlg.SelectedPath;
-                Properties.Settings.Default.Save();
+                AllSettings.LastSelectedFolder = dlg.SelectedPath;
+                AllSettings.SafeSettings();
 
-                string[] allfiles = Directory.GetFiles(dlg.SelectedPath, "Program.cs", SearchOption.AllDirectories);
+                //  string[] allfiles = Directory.GetFiles(dlg.SelectedPath, "Program.cs", SearchOption.AllDirectories);
+                var allfiles = SolutionHelper.LoadAllSolutionsFromPath(dlg.SelectedPath).OrderBy(p=> p.Info.SorteerNaam);
                 folderList.ItemsSource = allfiles;
             }
         }
 
         private void folderList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(folderList.SelectedItem!=null)
+            if (folderList.SelectedItem != null)
             {
-                var res = FastEvalCL.FastEvalCL.GetInfoFromCode(File.ReadAllText(folderList.SelectedItem.ToString()));
-                selInfo.DataContext = res;
-                if(cmbCodeFilter.SelectedIndex==0)
-                    textEditor.Text = File.ReadAllText(folderList.SelectedItem.ToString());
+                var activeSolVM = (folderList.SelectedItem as SolutionModel);
+                selInfo.DataContext =activeSolVM.Info;
+                if (cmbCodeFilter.SelectedIndex == 0)
+                    textEditor.Text = File.ReadAllText(activeSolVM.Path);
                 else
                 {
-                    var regions = FastEvalCL.FastEvalCL.GetCodeRegions(File.ReadAllText(folderList.SelectedItem.ToString()));
+                    var regions = FastEvalCL.FastEvalCL.GetCodeRegions(File.ReadAllText(activeSolVM.Path));
                     if (regions.Count > cmbCodeFilter.SelectedIndex - 1)
                     {
                         textEditor.Text = regions[cmbCodeFilter.SelectedIndex - 1];
                     }
                     else
-                        textEditor.Text = "********DEZE REGIO NIET GEVONDEN.HIERONDER ALLE CODE: ****\n\r" + File.ReadAllText(folderList.SelectedItem.ToString()); ;
+                    {
+                        textEditor.Text = "********DEZE REGIO NIET GEVONDEN.HIERONDER ALLE CODE: ****\n\r" + File.ReadAllText(activeSolVM.Path); ;
+                    }
                 }
             }
             else
@@ -73,9 +68,47 @@ namespace MakeLifeEasierWPF
 
         private void cmbCodeFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //i'm a hacker
-            if(folderList.SelectedIndex>=0)
+            //1'm @ 4ack3r
+            if (folderList.SelectedIndex >= 0)
                 folderList_SelectionChanged(this, null);
+        }
+
+        private void btnBoeteCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (folderList.SelectedItem != null)
+            {
+                // FastEvalCL.FastEvalCL.BoeteControle(folderList.SelectedItem.ToString());
+            }
+        }
+
+        private void btnSettings_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settings = new SettingsWindow(AllSettings);
+            settings.ShowDialog();
+            ReloadUI();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            AllSettings = new Settings();
+
+            //TODO  settings wegschrijven/inladen
+            ReloadUI();
+        }
+
+        private void ReloadUI()
+        {
+            //Filter combobox vullen met juiste hoeveelheid regions
+            cmbCodeFilter.SelectionChanged -= cmbCodeFilter_SelectionChanged;
+            cmbCodeFilter.Items.Clear();
+            cmbCodeFilter.Items.Add(new TextBlock() { Text = "Alles" });
+            for (int i = 0; i < AllSettings.RegionAmount; i++)
+            {
+                cmbCodeFilter.Items.Add(new TextBlock() { Text = "Region " + (i + 1) });
+            }
+            cmbCodeFilter.SelectionChanged += cmbCodeFilter_SelectionChanged;
+            cmbCodeFilter.SelectedIndex = 0;
+            
         }
     }
 }

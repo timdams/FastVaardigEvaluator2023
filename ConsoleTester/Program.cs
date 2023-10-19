@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using FastEvalCL;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -22,7 +23,13 @@ namespace ConsoleTester
             #region ClassCName.Random()
             public static void Test()
             {
+int meuh;
+string Person;
+            goto hell;
+
                  //Some more stuff
+
+                goto 42;
             }
             #endregion";
 
@@ -36,8 +43,15 @@ namespace ConsoleTester
 
             var res= FastEvalCL.FastEvalCL.GetInfoFromCode(code);
             Console.WriteLine(  res);
+
+            // var sum= FastEvalCL.FastEvalCL.BoeteControle(code);
+
+            SolutionHelper.LoadSolution(@"C:\Temp\ConsoleApp1");
+
+            //TODO https://learn.microsoft.com/en-us/visualstudio/msbuild/find-and-use-msbuild-versions?view=vs-2019
+
         }
 
-     
+
     }
 }

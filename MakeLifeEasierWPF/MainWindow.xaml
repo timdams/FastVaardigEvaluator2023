@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MakeLifeEasierWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+     
+        WindowState="Maximized" Loaded="Window_Loaded"
+        >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -22,6 +25,7 @@
                 </StackPanel>
                 <TextBlock Text="{Binding Path=SNummer}"/>
                 <TextBlock Text="{Binding Path=Klasgroep}"/>
+                <Button Name="btnBoeteCheck" Click="btnBoeteCheck_Click" Visibility="Hidden">Boetecheck trial</Button>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Row="1">
@@ -29,19 +33,30 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged"></ListBox>
+            <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        
+                        <StackPanel>
+                            
+                        <TextBlock Text="{Binding Path=Info.SorteerNaam}" FontWeight="Bold" ></TextBlock>
+                            <TextBlock FontSize="10" Text="{Binding Path=Path}" Margin="0,0,15,0" ></TextBlock>
+                        </StackPanel>
+                        
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <Grid Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-                        <ComboBox SelectedIndex="0" Name="cmbCodeFilter" SelectionChanged="cmbCodeFilter_SelectionChanged" >
-                    <ComboBoxItem Content="Alles" />
-                    <ComboBoxItem Content="Region 1" />
-                    <ComboBoxItem Content="Region 2"/>
-                    <ComboBoxItem Content="Region 3"/>
-                </ComboBox>
-                            <avalonEdit:TextEditor Grid.Row="1"
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox SelectedIndex="0" Name="cmbCodeFilter" SelectionChanged="cmbCodeFilter_SelectionChanged" >
+                    </ComboBox>
+                    <Button Name="btnSettings" Click="btnSettings_Click">...</Button>
+                </StackPanel>
+                <avalonEdit:TextEditor Grid.Row="1"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     Name="textEditor"
     FontFamily="Consolas"

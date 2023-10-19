@@ -10,7 +10,7 @@
         public string SNummer {
             get
             {
-                if (sNummer == "") return "ONBEKENDSNUM";
+                if (sNummer == "" || sNummer == null) return "ONBEKENDSNUM";
                 return sNummer;
             }
             set => sNummer = value;
@@ -18,7 +18,7 @@
         public string VoorNaam {
             get
             {
-                if (voorNaam == "") return "ONBEKENDVNAAM";
+                if (voorNaam == "" || voorNaam == null) return "ONBEKENDVNAAM";
                 return voorNaam;
             }
             set => voorNaam = value;
@@ -27,7 +27,7 @@
         {
             get
             {
-                if (achterNaam == "") return "ONBEKENDANAAM";
+                if (achterNaam == "" || achterNaam == null) return "ONBEKENDANAAM";
                 return achterNaam;
             }
             set => achterNaam = value;
@@ -35,11 +35,20 @@
         public string Klasgroep {
             get
             {
-                if (klasgroep == "") return "ONBEKENDKLGROEP";
+                if (klasgroep == "" || klasgroep == null) return "ONBEKENDKLGROEP";
                 return klasgroep;
             }
             set => klasgroep = value;
         }
+
+        public string SorteerNaam
+        {
+            get
+            {
+                return $"{AchterNaam} {VoorNaam}";
+            }
+        }
+
         public override string ToString()
         {
             return $"{AchterNaam} {VoorNaam} ({SNummer}), {Klasgroep}";
