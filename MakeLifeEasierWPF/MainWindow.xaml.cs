@@ -13,9 +13,10 @@ namespace MakeLifeEasierWPF
     public partial class MainWindow : Window
     {
         public Settings AllSettings { get; set; }
+        
         public MainWindow()
         {
-
+           
             InitializeComponent();
         }
 
@@ -32,7 +33,7 @@ namespace MakeLifeEasierWPF
                 AllSettings.SafeSettings();
 
                 //  string[] allfiles = Directory.GetFiles(dlg.SelectedPath, "Program.cs", SearchOption.AllDirectories);
-                var allfiles = SolutionHelper.LoadAllSolutionsFromPath(dlg.SelectedPath).OrderBy(p=> p.Info.SorteerNaam);
+                IOrderedEnumerable<SolutionModel> allfiles = SolutionHelper.LoadAllSolutionsFromPath(dlg.SelectedPath).OrderBy(p=> p.Info.SorteerNaam);
                 folderList.ItemsSource = allfiles;
             }
         }
@@ -43,6 +44,7 @@ namespace MakeLifeEasierWPF
             {
                 var activeSolVM = (folderList.SelectedItem as SolutionModel);
                 selInfo.DataContext =activeSolVM.Info;
+                boeteHeader.DataContext = activeSolVM.Boete;
                 if (cmbCodeFilter.SelectedIndex == 0)
                     textEditor.Text = File.ReadAllText(activeSolVM.Path);
                 else
@@ -91,9 +93,10 @@ namespace MakeLifeEasierWPF
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AllSettings = new Settings();
+       
+           //TODO  settings wegschrijven/inladen
+           ReloadUI();
 
-            //TODO  settings wegschrijven/inladen
-            ReloadUI();
         }
 
         private void ReloadUI()
@@ -109,6 +112,38 @@ namespace MakeLifeEasierWPF
             cmbCodeFilter.SelectionChanged += cmbCodeFilter_SelectionChanged;
             cmbCodeFilter.SelectedIndex = 0;
             
+        }
+
+        private void btnSaveBoetes_Click(object sender, RoutedEventArgs e)
+        {
+            if(folderList.ItemsSource!=null)
+            {
+                var lijstje = folderList.ItemsSource as IOrderedEnumerable<SolutionModel>;
+                foreach (var sol in lijstje)
+                {
+                    sol.SafeBoete();
+                }
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var msgResult = MessageBox.Show("Wil je ingevoerde boetes nog wegschrijven?", "OPGELET", MessageBoxButton.YesNoCancel);
+            if(msgResult== MessageBoxResult.Yes)
+            {
+                if (folderList.ItemsSource != null)
+                {
+                    var lijstje = folderList.ItemsSource as IOrderedEnumerable<SolutionModel>;
+                    foreach (var sol in lijstje)
+                    {
+                        sol.SafeBoete();
+                    }
+                }
+            }
+            else if(msgResult== MessageBoxResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Text.Json;
 
 namespace ConsoleTester
 {
@@ -46,9 +47,12 @@ string Person;
 
             // var sum= FastEvalCL.FastEvalCL.BoeteControle(code);
 
-            SolutionHelper.LoadSolution(@"C:\Temp\ConsoleApp1");
 
-            //TODO https://learn.microsoft.com/en-us/visualstudio/msbuild/find-and-use-msbuild-versions?view=vs-2019
+            Boete t = new Boete();
+            
+            string fileName = "boete.json";
+            string jsonString = JsonSerializer.Serialize(t);
+            File.WriteAllText(fileName, jsonString);
 
         }
 
