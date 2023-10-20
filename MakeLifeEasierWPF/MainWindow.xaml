@@ -16,8 +16,10 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel>
-            <Button Margin="5" Name="btnLoad" Click="btnLoad_Click">Load</Button>
+            <Button Name="btnLaadTemplate" Click="btnLaadTemplate_Click">Laad examentemplate</Button>
+            <Button Margin="5" Name="btnLoad" Click="btnLoad_Click">Kies folder waar studenten oplossingen staan</Button>
             <Button Name="btnSaveBoetes" Click="btnSaveBoetes_Click" >Schrijf boetes weg</Button>
+            <Button Name="btnExportBoetes" Click="btnExportBoetes_Click" >Exporteer boetes</Button>
             <StackPanel  Name="selInfo" HorizontalAlignment="Center" >
                 <StackPanel Orientation="Horizontal"  >
                     <TextBlock Text="{Binding Path=AchterNaam}" FontWeight="ExtraBold" />

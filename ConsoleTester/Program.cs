@@ -34,25 +34,21 @@ string Person;
             }
             #endregion";
 
-            List<string> codeRegions = FastEvalCL.FastEvalCL.GetCodeRegions(code);
-
-            foreach (var item in codeRegions)
+            var mijnTest = new FastEvalCL.ToetsTemplate()
             {
-                Console.WriteLine("Region");
-                Console.WriteLine(item);
-            }
-
-            var res= FastEvalCL.FastEvalCL.GetInfoFromCode(code);
-            Console.WriteLine(  res);
-
-            // var sum= FastEvalCL.FastEvalCL.BoeteControle(code);
-
-
-            Boete t = new Boete();
+                NaamToets = "Eerste poging 2023",
+                Versie = 211
+            };
             
-            string fileName = "boete.json";
-            string jsonString = JsonSerializer.Serialize(t);
-            File.WriteAllText(fileName, jsonString);
+            mijnTest.Vragen.Add(new Vraag() { MaxScore = 1, Beschrijving = "leuke vraag", Categorie = "H1" });
+            mijnTest.Vragen.Add(new Vraag() { MaxScore = 0, Beschrijving = "Opmerkingen", Categorie = "H1" });
+            mijnTest.Vragen.Add(new Vraag() { MaxScore = 1, Beschrijving = "goeie vraag2", Categorie = "H2" });
+            mijnTest.Vragen.Add(new Vraag() { MaxScore = 5, Beschrijving = "goeie vraag3", Categorie = "H2" });
+            mijnTest.Vragen.Add(new Vraag() { MaxScore = 2, Beschrijving = "Opmerkingen", Categorie = "H2" });
+
+
+            string jsonString = JsonSerializer.Serialize(mijnTest);
+            File.WriteAllText("trial.json", jsonString);
 
         }
 

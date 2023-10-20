@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastEvalCL
 {
-    public enum Severity { Light, Medium, Heavy};
-    public class Boete: INotifyPropertyChanged
+    public enum Severity { Light, Medium, Heavy };
+    public class Boete : INotifyPropertyChanged
     {
         private bool compileertNiet;
         private bool klassenNietApart;
@@ -26,7 +21,7 @@ namespace FastEvalCL
 
         public bool CompileertNiet
         {
-            get => compileertNiet; 
+            get => compileertNiet;
             set
             {
                 compileertNiet = value;
@@ -35,7 +30,7 @@ namespace FastEvalCL
         } //1
         public bool KlassenNietApart
         {
-            get => klassenNietApart; 
+            get => klassenNietApart;
             set
             {
                 klassenNietApart = value;
@@ -44,7 +39,7 @@ namespace FastEvalCL
         }//1
         public bool SlechteBladSpiegel
         {
-            get => slechteBladSpiegel; 
+            get => slechteBladSpiegel;
             set
             {
                 slechteBladSpiegel = value;
@@ -53,7 +48,7 @@ namespace FastEvalCL
         }//1
         public bool SlechteNaamgevingConventie
         {
-            get => slechteNaamgevingConventie; 
+            get => slechteNaamgevingConventie;
             set
             {
                 slechteNaamgevingConventie = value;
@@ -62,7 +57,7 @@ namespace FastEvalCL
         }//2
         public bool IncosistendeNaamgeving
         {
-            get => incosistendeNaamgeving; 
+            get => incosistendeNaamgeving;
             set
             {
                 incosistendeNaamgeving = value;
@@ -81,7 +76,7 @@ namespace FastEvalCL
         }//3
         public int GotoAndFriendsGebruikt
         {
-            get => gotoAndFriendsGebruikt; 
+            get => gotoAndFriendsGebruikt;
             set
             {
                 gotoAndFriendsGebruikt = value;
@@ -90,7 +85,7 @@ namespace FastEvalCL
         }//3
         public bool MethodenInMethoden
         {
-            get => methodenInMethoden; 
+            get => methodenInMethoden;
             set
             {
                 methodenInMethoden = value;
@@ -99,7 +94,7 @@ namespace FastEvalCL
         }//3
         public bool GeenZip
         {
-            get => geenZip; 
+            get => geenZip;
             set
             {
                 geenZip = value;
@@ -108,7 +103,7 @@ namespace FastEvalCL
         }
         public int RedundanteCode
         {
-            get => redundanteCode; 
+            get => redundanteCode;
             set
             {
                 redundanteCode = value;
@@ -121,5 +116,49 @@ namespace FastEvalCL
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public string GetCVSLine()
+        {
+            string res = "";
+
+            //TODO deze klasse vraagt om ambras. Beter scripted/generiek maken
+            res += BoolToString(compileertNiet, 1) + ";";
+            res += BoolToString(klassenNietApart, 1) + ";";
+            res += BoolToString(slechteBladSpiegel, 1) + ";";
+            res += BoolToString(slechteNaamgevingConventie, 2) + ";";
+            res += BoolToString(incosistendeNaamgeving, 1) + ";";
+            res += BoolToString(linqGebruikt, 3) + ";";
+            res += gotoAndFriendsGebruikt.ToString() + ";";
+            res += BoolToString(methodenInMethoden, 3) + ";";
+            res += BoolToString(geenZip, 1) + ";";
+            res += redundanteCode.ToString() + ";";
+
+            return res;
+
+
+        }
+        public static string GetCVSLineHeader()
+        {
+            string res = "";
+            res += "compileertNiet;";
+            res += "klassenNietApart;";
+            res += "slechteBladSpiegel;";
+            res += "slechteNaamgevingConventie;";
+            res += "incosistendeNaamgeving;";
+            res += "linqGebruikt;";
+            res += "gotoAndFriendsGebruikt;";
+            res += "methodenInMethoden;";
+            res += "geenZip;";
+            res += "redundanteCode;";
+            return res;
+        }
+
+        private string BoolToString(bool inp, int value)
+        {
+            return inp ? value.ToString() : "0";
+        }
+
+
+
     }
 }
