@@ -17,6 +17,18 @@ namespace FastEvalCL
             }
             else
                 Boete = new Boete();
+
+            //Vermoedelijk kan dus boetegedoe weg later
+            string scoreFile = System.IO.Path.Combine(FolderPath, "score.json");
+            if (File.Exists(scoreFile))
+            {
+                string jsonString = File.ReadAllText(scoreFile);
+                ToetsResultaten = JsonSerializer.Deserialize<ToetsTemplate>(jsonString);
+            }
+            else
+                ToetsResultaten = new ToetsTemplate();
+
+            
             if (tryFetchInfo)
             {
                 string code = File.ReadAllText(path);
@@ -44,12 +56,20 @@ namespace FastEvalCL
         public Info Info { get; set; }
         public Boete Boete { get; set; }
 
+        public ToetsTemplate ToetsResultaten { get; set; }
+
         public void SafeBoete()
         {
             if (Boete != null)
             {
                 string fileName = System.IO.Path.Combine(FolderPath, "boete.json");
                 string jsonString = JsonSerializer.Serialize(Boete);
+                File.WriteAllText(fileName, jsonString);
+            }
+            if (ToetsResultaten != null)
+            {
+                string fileName = System.IO.Path.Combine(FolderPath, "score.json");
+                string jsonString = JsonSerializer.Serialize(ToetsResultaten);
                 File.WriteAllText(fileName, jsonString);
             }
         }

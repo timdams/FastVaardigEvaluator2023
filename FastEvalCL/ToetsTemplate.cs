@@ -14,6 +14,7 @@
         public string Categorie { get; set; }
         public  int MaxScore { get; set; } = 1;
         public  string Beschrijving { get; set; }
+        public int Score { get; set; }
     }
 
     
