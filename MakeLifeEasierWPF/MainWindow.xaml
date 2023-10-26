@@ -16,7 +16,6 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel>
-            <Button Name="btnLaadTemplate" Click="btnLaadTemplate_Click">Laad examentemplate</Button>
             <Button Margin="5" Name="btnLoad" Click="btnLoad_Click">Kies folder waar studenten oplossingen staan</Button>
             <Button Name="btnSaveBoetes" Click="btnSaveBoetes_Click" >Schrijf boetes weg</Button>
             <Button Name="btnExportBoetes" Click="btnExportBoetes_Click" >Exporteer boetes</Button>
@@ -39,13 +38,20 @@
             <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        
-                        <StackPanel>
-                            
-                        <TextBlock Text="{Binding Path=Info.SorteerNaam}" FontWeight="Bold" ></TextBlock>
-                            <TextBlock FontSize="10" Text="{Binding Path=Path}" Margin="0,0,15,0" ></TextBlock>
-                        </StackPanel>
-                        
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="8*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{Binding Path=Info.SorteerNaam}" FontWeight="Bold" ></TextBlock>
+                                <TextBlock FontSize="10" Text="{Binding Path=Path}" MaxWidth="150" HorizontalAlignment="Left" Margin="0,0,15,0" ></TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Grid.Column="0">
+                                <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
+                                <Button Name="btnOpenInVS" Click="btnOpenInVS_Click"  FontSize="10">Open in VS</Button>
+                            </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

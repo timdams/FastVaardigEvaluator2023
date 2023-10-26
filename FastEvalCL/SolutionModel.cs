@@ -4,6 +4,12 @@ namespace FastEvalCL
 {
     public class SolutionModel
     {
+        public string ProjectPath { get
+            {
+                return "C:\\temp\\ConsoleApp3\\ConsoleApp3\\ConsoleApp3.csproj";
+            } 
+        }
+
         public SolutionModel(string path, bool tryFetchInfo = true)
         {
             Path = path;

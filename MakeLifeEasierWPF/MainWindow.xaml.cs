@@ -1,5 +1,6 @@
 ﻿using FastEvalCL;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -169,81 +170,16 @@ namespace MakeLifeEasierWPF
             }
         }
 
-        private void btnLaadTemplate_Click(object sender, RoutedEventArgs e)
+        private void btnOpenInExplorer_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
-            dlg.Filter = "Toetstemplates|*.json";
-            if (dlg.ShowDialog() == true)
-            {
-                try
-                {
-                    string jsonString = File.ReadAllText(dlg.FileName);
-                    huidigeTemplate = JsonSerializer.Deserialize<ToetsTemplate>(jsonString);
-                    GenerateVerbeterControls();
-                }
-                catch (Exception ex)
-                {
-
-                    MessageBox.Show("Helaas, deze json file kon ik niet verwerken. Sorry. Meer info: " + ex.Message);
-                }
-            }
-
+            string path = ((sender as Button).DataContext as SolutionModel).FolderPath;
+            Process.Start("explorer.exe", path);
         }
 
-        private void GenerateVerbeterControls()
+        private void btnOpenInVS_Click(object sender, RoutedEventArgs e)
         {
-            //per categorie een tab
-            if (huidigeTemplate != null)
-            {
-                var cats = huidigeTemplate.Vragen.GroupBy(p => p.Categorie);
-                foreach (var cat in cats)
-                {
-                    TabItem tb = new TabItem() { Header = cat.Key };
-                    WrapPanel wp = new WrapPanel() { Orientation = Orientation.Vertical };
-                    tb.Content = wp;
-                    foreach (var vraag in cat)
-                    {
-                        Control toAdd = null; ;
-                        if (vraag.MaxScore == 1)
-                        {
-                            toAdd = new CheckBox() { Content = vraag.Beschrijving };
-                            //TODO binding
-                            wp.Children.Add(toAdd);
-                        }
-                        else if (vraag.MaxScore == 0)
-                        {
-                            StackPanel sp = new StackPanel();
-                            sp.Children.Add(new TextBlock() { Text = vraag.Beschrijving });
-                            sp.Children.Add(new TextBox());
-                            //TODO binding
-                            wp.Children.Add(sp);
-                        }
-                        else
-                        {
-                            StackPanel sp = new StackPanel();
-                            sp.Children.Add(new TextBlock() { Text = vraag.Beschrijving });
-                            Slider slider = new Slider()
-                            {
-                                MinWidth = 50,
-                                Minimum = 0,
-                                Maximum = vraag.MaxScore,
-                                Interval = 1,
-                                SmallChange= 1,
-                                TickPlacement= System.Windows.Controls.Primitives.TickPlacement.BottomRight,
-                                IsSnapToTickEnabled= true,
-                                TickFrequency=1                        
-                            };
-                            
-                            sp.Children.Add(slider);
-                            //TODO binding
-                            wp.Children.Add(sp);
-                        }
-            
-
-                    }
-                    tabControl.Items.Add(tb);
-                }
-            }
+            string path = ((sender as Button).DataContext as SolutionModel).ProjectPath;
+            Process.Start(path);
         }
     }
 }
