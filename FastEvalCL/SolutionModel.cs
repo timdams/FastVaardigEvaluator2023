@@ -1,9 +1,14 @@
-﻿using System.Text.Json;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
+using System.Diagnostics;
+using System.Text.Json;
 
 namespace FastEvalCL
 {
     public class SolutionModel
     {
+        public string Code { get; private set; }
         public string ProjectPath { get
             {
                 return "C:\\temp\\ConsoleApp3\\ConsoleApp3\\ConsoleApp3.csproj";
@@ -25,8 +30,8 @@ namespace FastEvalCL
                 Boete = new Boete();
             if (tryFetchInfo)
             {
-                string code = File.ReadAllText(path);
-                Info = FastEvalCL.GetInfoFromCode(code);
+                Code = File.ReadAllText(path);
+                Info = FastEvalCL.GetInfoFromCode(Code);
             }
             else
                 Info = new Info()
@@ -58,6 +63,50 @@ namespace FastEvalCL
                 string jsonString = JsonSerializer.Serialize(Boete);
                 File.WriteAllText(fileName, jsonString);
             }
+        }
+
+        public string TryBuildCode()
+        {
+            // Set the compiler options.
+            CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
+
+            // Parse the code into a SyntaxTree.
+            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(Code, parseOptions);
+
+            // Set the compiler options for the C# compiler.
+            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+
+            // Create a compilation with a reference to mscorlib (for system-related types).
+            var compilation = CSharpCompilation.Create("MyProgram")
+                .WithOptions(compilationOptions)
+                 .AddReferences(
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // Add reference to System.Core
+                MetadataReference.CreateFromFile(typeof(Activator).Assembly.Location)) // Add reference to System.Runtime
+                .AddSyntaxTrees(syntaxTree);
+
+            // Check for compilation errors.
+            var diagnostics = compilation.GetDiagnostics();
+
+            if (!diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error))
+            {
+                
+                return "Compilation successful.";
+            }
+            else
+            {
+                string res= "Compilation failed. Errors:";
+                foreach (var diagnostic in diagnostics)
+                {
+                    if (diagnostic.Severity == DiagnosticSeverity.Error)
+                    {
+                        res+=(diagnostic.ToString())+ "\n";
+                    }
+                }
+                return res;
+            }
+            
         }
     }
 }

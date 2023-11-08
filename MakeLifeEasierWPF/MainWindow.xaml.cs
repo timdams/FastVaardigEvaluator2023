@@ -178,8 +178,8 @@ namespace MakeLifeEasierWPF
 
         private void btnOpenInVS_Click(object sender, RoutedEventArgs e)
         {
-            string path = ((sender as Button).DataContext as SolutionModel).ProjectPath;
-            Process.Start(path);
+            string res = ((sender as Button).DataContext as SolutionModel).TryBuildCode();
+            MessageBox.Show(res.ToString());
         }
     }
 }

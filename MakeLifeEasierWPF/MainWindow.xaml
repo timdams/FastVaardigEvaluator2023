@@ -45,11 +45,11 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="{Binding Path=Info.SorteerNaam}" FontWeight="Bold" ></TextBlock>
-                                <TextBlock FontSize="10" Text="{Binding Path=Path}" MaxWidth="150" HorizontalAlignment="Left" Margin="0,0,15,0" ></TextBlock>
+                                <TextBlock FontSize="10" Text="{Binding Path=Path}" MaxWidth="350" HorizontalAlignment="Left" Margin="0,0,15,0" ></TextBlock>
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Grid.Column="0">
                                 <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
-                                <!--<Button Name="btnOpenInVS" Click="btnOpenInVS_Click"  FontSize="10">Open in VS</Button>-->
+                                <Button Name="btnOpenInVS" IsEnabled="False" Click="btnOpenInVS_Click"  FontSize="10">Compileert?</Button>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
