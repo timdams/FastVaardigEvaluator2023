@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ConsoleTester
@@ -11,45 +12,79 @@ namespace ConsoleTester
     {
         static void Main(string[] args)
         {
-            var code = @"#region ClassName.Test()    //Some method that does stuff
-            //some stuff
-            #endregion
+            const string startPath = @"D:\Temp\__PPUNZ\Hafid Khorta_214945_assignsubmission_file_\PP2eZitHafidKhorta\PP2eZitHafidKhorta";
+            const string codeFileName = "Program.cs";
+            const string compiledProgramName = "Program.exe";
+            const string devCmdPath= "%comspec% /k \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\VsDevCmd.bat\"";
+            const int compileDelay = 2000; //make larger on slow computers
 
-                //VUL VOLGENDE INFORMATIE HIER IN
-    //S-nummer              :  S00478
-    //Voornaam              :  Jos   
-    //Achternaam            :  Dams         
-    //Klasgroep (bv 1IT1b)  :  1IT2b  
+            string fullProgramPath = Path.Combine(startPath, compiledProgramName);
+            string fullCodePath = Path.Combine(startPath, codeFileName);
 
-            #region ClassCName.Random()
-            public static void Test()
+            if (File.Exists(fullProgramPath))
+                File.Delete(fullProgramPath);
+
+            //check for using System
+            var code = File.ReadAllText(fullCodePath);
+            if (!code.Contains("using System;"))
             {
-int meuh;
-string Person;
-            goto hell;
-
-                 //Some more stuff
-
-                goto 42;
+                var newCode = "using System;\r\n" + code;
+                File.WriteAllText(fullCodePath, newCode);
             }
-            #endregion";
 
-            var mijnTest = new FastEvalCL.ToetsTemplate()
+            using (Process process = new Process())
             {
-                NaamToets = "Eerste poging 2023",
-                Versie = 211
-            };
-            
-            mijnTest.Vragen.Add(new Vraag() { MaxScore = 1, Beschrijving = "leuke vraag", Categorie = "H1" });
-            mijnTest.Vragen.Add(new Vraag() { MaxScore = 0, Beschrijving = "Opmerkingen", Categorie = "H1" });
-            mijnTest.Vragen.Add(new Vraag() { MaxScore = 1, Beschrijving = "goeie vraag2", Categorie = "H2" });
-            mijnTest.Vragen.Add(new Vraag() { MaxScore = 5, Beschrijving = "goeie vraag3", Categorie = "H2" });
-            mijnTest.Vragen.Add(new Vraag() { MaxScore = 2, Beschrijving = "Opmerkingen", Categorie = "H2" });
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = true;
+                process.StartInfo.CreateNoWindow = false;
+                process.StartInfo.WorkingDirectory = startPath;
+                
+                process.StartInfo.FileName = Path.Combine(Environment.SystemDirectory, "cmd.exe");
+
+                // Redirects the standard input so that commands can be sent to the shell.
+                process.StartInfo.RedirectStandardInput = true;
+                // Runs the specified command and exits the shell immediately.
+                //process.StartInfo.Arguments = @"/c ""dir""";
+
+                process.OutputDataReceived += ProcessOutputDataHandler;
+                process.ErrorDataReceived += ProcessErrorDataHandler;
+                process.EnableRaisingEvents = true;
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
+
+                // Send a directory command and an exit command to the shell
+                process.StandardInput.WriteLine(devCmdPath);
+
+                process.StandardInput.WriteLine($"csc.exe {codeFileName}");
+                System.Threading.Thread.Sleep(compileDelay);
+                process.StandardInput.WriteLine("exit");
 
 
-            string jsonString = JsonSerializer.Serialize(mijnTest);
-            File.WriteAllText("trial.json", jsonString);
+                process.Kill();
 
+
+
+            }
+            //  Console.Clear();
+            if (File.Exists(fullProgramPath))
+            {
+                Console.Clear();
+                Process.Start(fullProgramPath); 
+            }
+            else
+                Console.WriteLine("Kon niet gecompileerd worden");
+        }
+
+        public static void ProcessOutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            Console.WriteLine(outLine.Data);
+        }
+
+        public static void ProcessErrorDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            Console.WriteLine(outLine.Data);
         }
 
 

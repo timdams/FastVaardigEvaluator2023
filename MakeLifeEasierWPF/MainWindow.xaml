@@ -49,7 +49,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Vertical" Grid.Column="0">
                                 <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
-                                <Button Name="btnOpenInVS" IsEnabled="False" Click="btnOpenInVS_Click"  FontSize="10">Compileert?</Button>
+                                <Button Name="btnOpenInVS" IsEnabled="True" Click="btnOpenInVS_Click"  FontSize="10">Compileert?</Button>
                             </StackPanel>
                         </Grid>
                     </DataTemplate>
