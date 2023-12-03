@@ -66,7 +66,7 @@ namespace FastEvalCL
             }
         }
 
-        public string TryBuildCode()
+        public string TryBuildCode(int compilerDelay, string devVsPath)
         {
             try
             {
@@ -87,14 +87,14 @@ namespace FastEvalCL
                     // Insert the new line into the Main method
                     var newMainMethod = mainMethod.AddBodyStatements(newLineSyntax);
                     root = root.ReplaceNode(mainMethod, newMainMethod);
-                    return BuildAndRunHelper.BuildAndRun(root.ToFullString());
+                    return BuildAndRunHelper.BuildAndRun(root.ToFullString(), compilerDelay, devVsPath);
 
             }
             catch (Exception)
             {
                 try
                 {
-                    return BuildAndRunHelper.BuildAndRun(Code);
+                    return BuildAndRunHelper.BuildAndRun(Code, compilerDelay, devVsPath);
                 }
                 catch (Exception ex)
                 {

@@ -178,7 +178,7 @@ namespace MakeLifeEasierWPF
 
         private void btnOpenInVS_Click(object sender, RoutedEventArgs e)
         {
-            string res = ((sender as Button).DataContext as SolutionModel).TryBuildCode();
+            string res = ((sender as Button).DataContext as SolutionModel).TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath);
             if (res != "")
                 MessageBox.Show(res.ToString());
         }

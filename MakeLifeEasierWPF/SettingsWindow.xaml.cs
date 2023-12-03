@@ -30,6 +30,8 @@ namespace MakeLifeEasierWPF
             //Schrijf settings over
 
             AllSettings.RegionAmount =Convert.ToInt32(regionAmountSlider.Value);
+            AllSettings.CompilerDelay = Convert.ToInt32(compilerDelayText.Text);
+            AllSettings.DevVsPath = devvspathText.Text;
             AllSettings.SafeSettings();
             this.Close();
         }
@@ -38,6 +40,8 @@ namespace MakeLifeEasierWPF
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             regionAmountSlider.Value = AllSettings.RegionAmount;
+            compilerDelayText.Text = AllSettings.CompilerDelay.ToString();
+            devvspathText.Text = AllSettings.DevVsPath;
         }
     }
 }

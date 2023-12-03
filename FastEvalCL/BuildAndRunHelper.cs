@@ -10,13 +10,13 @@ namespace FastEvalCL
 {
     public class BuildAndRunHelper
     {
-        public static string DevCmdPath { get; set; } = "%comspec% /k \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\VsDevCmd.bat\""; //TODO: config tool?
 
         public static string CompiledProgramName { get; set; } = @"temp\Program.exe";
-        public static int CompileDelay { get; set; } = 2000;
 
-        public static string BuildAndRun(string code)
+        public static string BuildAndRun(string code, int compilerDelay, string devVsPath)
         {
+            errors = "";
+           string DevCmdPath = $"%comspec% /k \"{devVsPath}\""; 
             try
             {
                 const string tempCodePath = "temp\\Program.cs";
@@ -65,7 +65,7 @@ namespace FastEvalCL
                     process.StandardInput.WriteLine(DevCmdPath);
 
                     process.StandardInput.WriteLine($"csc.exe Program.cs");
-                    System.Threading.Thread.Sleep(CompileDelay);
+                    System.Threading.Thread.Sleep(compilerDelay);
                     process.StandardInput.WriteLine("exit");
 
                     process.Kill();
