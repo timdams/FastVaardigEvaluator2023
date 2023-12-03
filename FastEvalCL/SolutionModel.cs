@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using System.Diagnostics;
 using System.Text.Json;
@@ -67,45 +68,45 @@ namespace FastEvalCL
 
         public string TryBuildCode()
         {
-            // Set the compiler options.
-            CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
-
-            // Parse the code into a SyntaxTree.
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(Code, parseOptions);
-
-            // Set the compiler options for the C# compiler.
-            CSharpCompilationOptions compilationOptions = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
-
-            // Create a compilation with a reference to mscorlib (for system-related types).
-            var compilation = CSharpCompilation.Create("MyProgram")
-                .WithOptions(compilationOptions)
-                 .AddReferences(
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location), // Add reference to System.Core
-                MetadataReference.CreateFromFile(typeof(Activator).Assembly.Location)) // Add reference to System.Runtime
-                .AddSyntaxTrees(syntaxTree);
-
-            // Check for compilation errors.
-            var diagnostics = compilation.GetDiagnostics();
-
-            if (!diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error))
+            try
             {
-                
-                return "Compilation successful.";
+              
+                    //// Set the compiler options.
+                    CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
+
+                    //// Parse the code into a SyntaxTree.
+                    SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(Code, parseOptions);
+                    var root = syntaxTree.GetRoot() as CompilationUnitSyntax;
+                    // Find the Main method
+                    var mainMethod = root.DescendantNodes()
+                                         .OfType<MethodDeclarationSyntax>()
+                                         .First(method => method.Identifier.ValueText == "Main");
+                    // Parse the new line of code
+                    var newLineSyntax = SyntaxFactory.ParseStatement("Console.ReadKey();\n");
+
+                    // Insert the new line into the Main method
+                    var newMainMethod = mainMethod.AddBodyStatements(newLineSyntax);
+                    root = root.ReplaceNode(mainMethod, newMainMethod);
+                    return BuildAndRunHelper.BuildAndRun(root.ToFullString());
+
             }
-            else
+            catch (Exception)
             {
-                string res= "Compilation failed. Errors:";
-                foreach (var diagnostic in diagnostics)
+                try
                 {
-                    if (diagnostic.Severity == DiagnosticSeverity.Error)
-                    {
-                        res+=(diagnostic.ToString())+ "\n";
-                    }
+                    return BuildAndRunHelper.BuildAndRun(Code);
                 }
-                return res;
+                catch (Exception ex)
+                {
+
+                    return ex.Message;
+                }
             }
+         
+
+
+            
+            
             
         }
     }

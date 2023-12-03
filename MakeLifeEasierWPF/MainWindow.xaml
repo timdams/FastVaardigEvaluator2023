@@ -35,26 +35,37 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="8*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <StackPanel Grid.Column="1">
-                                <TextBlock Text="{Binding Path=Info.SorteerNaam}" FontWeight="Bold" ></TextBlock>
-                                <TextBlock FontSize="10" Text="{Binding Path=Path}" MaxWidth="350" HorizontalAlignment="Left" Margin="0,0,15,0" ></TextBlock>
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical" Grid.Column="0">
-                                <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
-                                <Button Name="btnOpenInVS" IsEnabled="True" Click="btnOpenInVS_Click"  FontSize="10">Compileert?</Button>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <StackPanel Grid.Column="0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Filter/search:</TextBlock>
+                    <TextBox TextChanged="TextBox_TextChanged" Name="txbSearch" MinWidth="100" ></TextBox>
+                    
+                
+                </StackPanel>
+                <CheckBox Name="chkInCodeOnlySearch">Search only in code</CheckBox>
+                <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="8*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding Path=Info.SorteerNaam}" FontWeight="Bold" ></TextBlock>
+                                    <TextBlock FontSize="10" Text="{Binding Path=Path}" MaxWidth="350" HorizontalAlignment="Left" Margin="0,0,15,0" ></TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical" Grid.Column="0">
+                                    <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
+                                    <Button Name="btnOpenInVS" IsEnabled="True" Click="btnOpenInVS_Click"  FontSize="10">Compileert?</Button>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+
+          
             <Grid Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>

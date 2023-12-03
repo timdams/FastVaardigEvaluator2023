@@ -21,7 +21,7 @@ namespace MakeLifeEasierWPF
 
             InitializeComponent();
         }
-
+        IOrderedEnumerable<SolutionModel> allFiles = null;
         private void btnLoad_Click(object sender, RoutedEventArgs e)
         {
 
@@ -35,8 +35,8 @@ namespace MakeLifeEasierWPF
                 AllSettings.SafeSettings();
 
                 //  string[] allfiles = Directory.GetFiles(dlg.SelectedPath, "Program.cs", SearchOption.AllDirectories);
-                IOrderedEnumerable<SolutionModel> allfiles = SolutionHelper.LoadAllSolutionsFromPath(dlg.SelectedPath).OrderBy(p => p.Info.SorteerNaam);
-                folderList.ItemsSource = allfiles;
+                allFiles = SolutionHelper.LoadAllSolutionsFromPath(dlg.SelectedPath).OrderBy(p => p.Info.SorteerNaam);
+                folderList.ItemsSource = allFiles;
             }
         }
 
@@ -179,7 +179,23 @@ namespace MakeLifeEasierWPF
         private void btnOpenInVS_Click(object sender, RoutedEventArgs e)
         {
             string res = ((sender as Button).DataContext as SolutionModel).TryBuildCode();
-            MessageBox.Show(res.ToString());
+            if (res != "")
+                MessageBox.Show(res.ToString());
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (txbSearch.Text != "" || !string.IsNullOrEmpty(txbSearch.Text))
+            {
+                if (chkInCodeOnlySearch.IsChecked == false)
+                    folderList.ItemsSource = allFiles.Where(p => p.Info.SorteerNaam.Contains(txbSearch.Text) || p.Path.Contains(txbSearch.Text)).OrderBy(p => p.Info.SorteerNaam);
+                else
+                {
+                    if (txbSearch.Text.Length > 4)
+                        folderList.ItemsSource = allFiles.Where(p => p.Code.Contains(txbSearch.Text)).OrderBy(p => p.Info.SorteerNaam);
+                }
+            }
+            else folderList.ItemsSource = allFiles;
         }
     }
 }

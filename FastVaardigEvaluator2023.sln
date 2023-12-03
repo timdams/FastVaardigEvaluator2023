@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FastEvalCL", "FastEvalCL\Fa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTester", "ConsoleTester\ConsoleTester.csproj", "{61E8DCA4-A65B-443B-9520-2960DCBCCC08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeLifeEasierWPF", "MakeLifeEasierWPF\MakeLifeEasierWPF.csproj", "{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeLifeEasierWPF", "MakeLifeEasierWPF\MakeLifeEasierWPF.csproj", "{EBD68892-B2DB-4EEF-83A6-FF6762A9B099}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
