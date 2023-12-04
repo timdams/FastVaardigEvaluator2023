@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -202,14 +203,48 @@ namespace MakeLifeEasierWPF
             }
             else folderList.ItemsSource = allFiles;
         }
-
-        private void testAll_Click(object sender, RoutedEventArgs e)
+        public void UpdateProgressText(double percentage)
         {
-            foreach (SolutionModel item in folderList.Items)
+            progressBar.Value = percentage;
+            
+        }
+        private async void testAll_Click(object sender, RoutedEventArgs e)
+        {
+            folderList.IsEnabled = false;
+            progressBar.Visibility = Visibility.Visible;
+            IProgress<double> progress = new Progress<double>(UpdateProgressText);
+
+            try
             {
-                string res = item.TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath, false);
-                Debug.WriteLine($"Compiletest {item}:{res}");
+                await Task.Run(() =>
+                {
+                    double teller = 0;
+                    int total = folderList.Items.Count;
+                    progress.Report(0.01);
+                    foreach (SolutionModel item in folderList.Items)
+                    {
+                        string res = item.TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath, false);
+                        Debug.WriteLine($"Compiletest {item}:{res}");
+                        teller++;
+                        progress.Report(teller/total);
+                    }
+                }
+                    );
+     
             }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                folderList.IsEnabled = true;
+
+                progressBar.Visibility = Visibility.Collapsed;
+            }
+
+
         }
     }
 }

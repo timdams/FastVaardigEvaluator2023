@@ -23,6 +23,7 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <Button Margin="5" Name="btnLoad" Click="btnLoad_Click">Kies folder waar studenten oplossingen staan</Button>
+            <Button Name="btnSettings" Click="btnSettings_Click">Instellingen</Button>
             <Button Name="btnSaveBoetes" Click="btnSaveBoetes_Click" >Schrijf boetes weg</Button>
             <Button Name="btnExportBoetes" Click="btnExportBoetes_Click" >Exporteer boetes</Button>
             <StackPanel  Name="selInfo" HorizontalAlignment="Center" >
@@ -50,7 +51,7 @@
                 </StackPanel>
                 <CheckBox Name="chkInCodeOnlySearch">Search only in code</CheckBox>
                 <Button Name="testAll" Click="testAll_Click">Test alle projecten of ze compileren</Button>
-
+                <ProgressBar x:Name="progressBar" Width="200" Height="20" Minimum="0" Maximum="1" Visibility="Collapsed"/>
                 <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -82,7 +83,7 @@
                 <StackPanel Orientation="Horizontal">
                     <ComboBox SelectedIndex="0" Name="cmbCodeFilter" SelectionChanged="cmbCodeFilter_SelectionChanged" >
                     </ComboBox>
-                    <Button Name="btnSettings" Click="btnSettings_Click">...</Button>
+                    
                 </StackPanel>
                 <avalonEdit:TextEditor Grid.Row="1"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
