@@ -13,7 +13,7 @@ namespace FastEvalCL
 
         public static string CompiledProgramName { get; set; } = @"temp\Program.exe";
 
-        public static string BuildAndRun(string code, int compilerDelay, string devVsPath)
+        public static string BuildAndRun(string code, int compilerDelay, string devVsPath, bool alsoRun)
         {
             errors = "";
            string DevCmdPath = $"%comspec% /k \"{devVsPath}\""; 
@@ -72,10 +72,10 @@ namespace FastEvalCL
 
                 }
 
-                if (File.Exists(CompiledProgramName))
+                if (File.Exists(CompiledProgramName) )
                 {
-
-                    Process.Start(CompiledProgramName);
+                    if(alsoRun)
+                        Process.Start(CompiledProgramName);
                     return "";
                 }
                 else
@@ -95,7 +95,7 @@ namespace FastEvalCL
         public static void ProcessOutputDataHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
             //Debug.WriteLine(outLine.Data);
-            if (outLine.Data.Contains("error"))
+            if (outLine.Data!=null &&  outLine.Data.Contains("error"))
                 errors += outLine.Data;
         }
 

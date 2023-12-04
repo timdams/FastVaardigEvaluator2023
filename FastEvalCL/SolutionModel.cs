@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace FastEvalCL
@@ -10,10 +11,12 @@ namespace FastEvalCL
     public class SolutionModel
     {
         public string Code { get; private set; }
-        public string ProjectPath { get
+        public string ProjectPath
+        {
+            get
             {
                 return "C:\\temp\\ConsoleApp3\\ConsoleApp3\\ConsoleApp3.csproj";
-            } 
+            }
         }
 
         public SolutionModel(string path, bool tryFetchInfo = true)
@@ -65,49 +68,54 @@ namespace FastEvalCL
                 File.WriteAllText(fileName, jsonString);
             }
         }
-
-        public string TryBuildCode(int compilerDelay, string devVsPath)
+        public override string ToString()
+        {
+            return Info.ToString();
+        }
+        public string TryBuildCode(int compilerDelay, string devVsPath, bool alsoRun=true)
         {
             try
             {
-              
-                    //// Set the compiler options.
-                    CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
 
-                    //// Parse the code into a SyntaxTree.
-                    SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(Code, parseOptions);
-                    var root = syntaxTree.GetRoot() as CompilationUnitSyntax;
-                    // Find the Main method
-                    var mainMethod = root.DescendantNodes()
-                                         .OfType<MethodDeclarationSyntax>()
-                                         .First(method => method.Identifier.ValueText == "Main");
-                    // Parse the new line of code
-                    var newLineSyntax = SyntaxFactory.ParseStatement("Console.ReadKey();\n");
+                //// Set the compiler options.
+                CSharpParseOptions parseOptions = new CSharpParseOptions(LanguageVersion.Latest);
 
-                    // Insert the new line into the Main method
-                    var newMainMethod = mainMethod.AddBodyStatements(newLineSyntax);
-                    root = root.ReplaceNode(mainMethod, newMainMethod);
-                    return BuildAndRunHelper.BuildAndRun(root.ToFullString(), compilerDelay, devVsPath);
+                //// Parse the code into a SyntaxTree.
+                SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(Code, parseOptions);
+                var root = syntaxTree.GetRoot() as CompilationUnitSyntax;
+                // Find the Main method
+                var mainMethod = root.DescendantNodes()
+                                     .OfType<MethodDeclarationSyntax>()
+                                     .First(method => method.Identifier.ValueText == "Main");
+                // Parse the new line of code
+                var newLineSyntax = SyntaxFactory.ParseStatement("Console.ReadKey();\n");
+
+                // Insert the new line into the Main method
+                var newMainMethod = mainMethod.AddBodyStatements(newLineSyntax);
+                root = root.ReplaceNode(mainMethod, newMainMethod);
+                string res = BuildAndRunHelper.BuildAndRun(root.ToFullString(), compilerDelay, devVsPath, alsoRun);
+                if (res == "")
+                    this.Boete.CompileertNiet = Tested.Compileert;
+                else this.Boete.CompileertNiet = Tested.CompileertNiet;
+                return res;
 
             }
             catch (Exception)
             {
                 try
                 {
-                    return BuildAndRunHelper.BuildAndRun(Code, compilerDelay, devVsPath);
+                    string res= BuildAndRunHelper.BuildAndRun(Code, compilerDelay, devVsPath,alsoRun);
+                    if (res == "")
+                        this.Boete.CompileertNiet = Tested.Compileert;
+                    else this.Boete.CompileertNiet = Tested.CompileertNiet;
+                    return res;
                 }
                 catch (Exception ex)
-                {
-
+                {               
                     return ex.Message;
                 }
             }
-         
 
-
-            
-            
-            
         }
     }
 }

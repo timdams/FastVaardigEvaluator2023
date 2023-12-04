@@ -4,9 +4,10 @@ using System.Runtime.CompilerServices;
 namespace FastEvalCL
 {
     public enum Severity { Light, Medium, Heavy };
+    public enum Tested { NietGetest, CompileertNiet, Compileert}
     public class Boete : INotifyPropertyChanged
     {
-        private bool compileertNiet;
+        private Tested compileertNiet = Tested.NietGetest;
         private bool klassenNietApart;
         private bool slechteBladSpiegel;
         private bool slechteNaamgevingConventie;
@@ -19,7 +20,7 @@ namespace FastEvalCL
 
         //Todo scriptbased doen en dit laten inladen vanuit json file
 
-        public bool CompileertNiet
+        public Tested CompileertNiet
         {
             get => compileertNiet;
             set
@@ -122,7 +123,12 @@ namespace FastEvalCL
             string res = "";
 
             //TODO deze klasse vraagt om ambras. Beter scripted/generiek maken
-            res += BoolToString(compileertNiet, 1) + ";";
+            if(compileertNiet== Tested.NietGetest)
+                res += "x" + ";";
+            if (compileertNiet == Tested.CompileertNiet)
+                res += "1" + ";";
+            if (compileertNiet == Tested.Compileert)
+                res += "0" + ";";
             res += BoolToString(klassenNietApart, 1) + ";";
             res += BoolToString(slechteBladSpiegel, 1) + ";";
             res += BoolToString(slechteNaamgevingConventie, 2) + ";";

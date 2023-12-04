@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace MakeLifeEasierWPF
 {
@@ -180,7 +181,11 @@ namespace MakeLifeEasierWPF
         {
             string res = ((sender as Button).DataContext as SolutionModel).TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath);
             if (res != "")
+            {
                 MessageBox.Show(res.ToString());
+
+            }
+
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -196,6 +201,15 @@ namespace MakeLifeEasierWPF
                 }
             }
             else folderList.ItemsSource = allFiles;
+        }
+
+        private void testAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (SolutionModel item in folderList.Items)
+            {
+                string res = item.TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath, false);
+                Debug.WriteLine($"Compiletest {item}:{res}");
+            }
         }
     }
 }

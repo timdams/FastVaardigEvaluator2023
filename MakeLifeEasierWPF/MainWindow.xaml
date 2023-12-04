@@ -4,11 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MakeLifeEasierWPF"
+        xmlns:convertors="clr-namespace:MakeLifeEasierWPF.Convertors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
      
         WindowState="Maximized" Loaded="Window_Loaded" Closing="Window_Closing"
         >
+    <Window.Resources>
+        <convertors:EnumCompileerTestToColorConverter x:Key="boolColorConvertor"></convertors:EnumCompileerTestToColorConverter>
+
+        <convertors:EnumToCheckBoxStateConvertor x:Key="enumtoCBConvertor"></convertors:EnumToCheckBoxStateConvertor>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
@@ -43,6 +49,8 @@
                 
                 </StackPanel>
                 <CheckBox Name="chkInCodeOnlySearch">Search only in code</CheckBox>
+                <Button Name="testAll" Click="testAll_Click">Test alle projecten of ze compileren</Button>
+
                 <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -57,9 +65,9 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical" Grid.Column="0">
                                     <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
-                                    <Button Name="btnOpenInVS" IsEnabled="True" Click="btnOpenInVS_Click"  FontSize="10">Compileert?</Button>
+                                    <Button Name="btnOpenInVS" IsEnabled="True" Click="btnOpenInVS_Click"  FontSize="10" Background="{Binding Path=Boete.CompileertNiet, Converter={StaticResource boolColorConvertor}}">Compileert?</Button>
                                 </StackPanel>
-                            </Grid>
+                                </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -88,7 +96,7 @@
             <TabItem Header="Boete" Name="boeteHeader" >
                 <WrapPanel Orientation="Vertical" >
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=GeenZip}" IsEnabled="false" >Geen zip</CheckBox>
-                        <CheckBox IsChecked="{Binding Mode=TwoWay, Path=CompileertNiet}">Compileert niet</CheckBox>
+                    <CheckBox IsChecked="{Binding Mode=TwoWay, Path=CompileertNiet, Converter={StaticResource enumtoCBConvertor}}" IsThreeState="True">Compileert niet</CheckBox>
                         <CheckBox IsChecked="{Binding Mode=TwoWay, Path=KlassenNietApart}">Klassen niet apart</CheckBox>
                         <CheckBox IsChecked="{Binding Mode=TwoWay, Path=SlechteBladSpiegel}">Slechte bladspiegel</CheckBox>
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=SlechteNaamgevingConventie}">Naamgeving niet volgens afspraken</CheckBox>
