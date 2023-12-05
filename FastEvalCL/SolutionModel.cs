@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FastEvalCL
 {
@@ -150,6 +151,13 @@ namespace FastEvalCL
             }
 
         }
+        
+        public double ComputeSimilarity(string codeTarget)
+        {
+            return CodeComparerFraudDetector.SimilarityCompute(this.Code, codeTarget, CodeComparerFraudDetector.DetectorModes.EqualLines);
+            
+        }
+        
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {

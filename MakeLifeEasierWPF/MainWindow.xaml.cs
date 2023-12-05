@@ -253,5 +253,15 @@ namespace MakeLifeEasierWPF
 
             }
         }
+
+        private void btnSimilarity_Click(object sender, RoutedEventArgs e)
+        {
+            if (folderList.SelectedItem != null)
+            {
+                var activeSolVM = (folderList.SelectedItem as SolutionModel);
+                var res = activeSolVM.ComputeSimilarity(AllSettings.ModelOplossing);
+                MessageBox.Show(res.ToString()+"%");
+            }
+        }
     }
 }
