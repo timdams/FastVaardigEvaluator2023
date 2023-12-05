@@ -2,14 +2,19 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 namespace FastEvalCL
 {
-    public class SolutionModel
+    public class SolutionModel : INotifyPropertyChanged
     {
+        private Boete boete;
+        private string compileErrors;
+        private Info info;
+
         public string Code { get; private set; }
         public string ProjectPath
         {
@@ -56,8 +61,34 @@ namespace FastEvalCL
             }
         }
 
-        public Info Info { get; set; }
-        public Boete Boete { get; set; }
+        public Info Info
+        {
+            get => info; 
+            set
+            {
+                info = value;
+                OnPropertyChanged();
+            }
+        }
+        public string CompileErrors
+        {
+            get => compileErrors; 
+            set
+            {
+                compileErrors = value;
+                OnPropertyChanged();
+            }
+        }
+        public Boete Boete
+        {
+            get => boete; 
+            set
+            {
+               
+                boete = value; 
+                OnPropertyChanged();
+            }
+        }
 
         public void SafeBoete()
         {
@@ -72,8 +103,9 @@ namespace FastEvalCL
         {
             return Info.ToString();
         }
-        public string TryBuildCode(int compilerDelay, string devVsPath, bool alsoRun=true)
+        public void TryBuildCode(int compilerDelay, string devVsPath, bool alsoRun=true)
         {
+                
             try
             {
 
@@ -93,29 +125,36 @@ namespace FastEvalCL
                 // Insert the new line into the Main method
                 var newMainMethod = mainMethod.AddBodyStatements(newLineSyntax);
                 root = root.ReplaceNode(mainMethod, newMainMethod);
-                string res = BuildAndRunHelper.BuildAndRun(root.ToFullString(), compilerDelay, devVsPath, alsoRun);
-                if (res == "")
+                Code = root.ToFullString();
+                CompileErrors = BuildAndRunHelper.BuildAndRun(Code, compilerDelay, devVsPath, alsoRun);
+                if (CompileErrors == "")
                     this.Boete.CompileertNiet = Tested.Compileert;
                 else this.Boete.CompileertNiet = Tested.CompileertNiet;
-                return res;
+               
 
             }
             catch (Exception)
             {
                 try
                 {
-                    string res= BuildAndRunHelper.BuildAndRun(Code, compilerDelay, devVsPath,alsoRun);
-                    if (res == "")
+                    CompileErrors = BuildAndRunHelper.BuildAndRun(Code, compilerDelay, devVsPath,alsoRun);
+                    if (CompileErrors == "")
                         this.Boete.CompileertNiet = Tested.Compileert;
                     else this.Boete.CompileertNiet = Tested.CompileertNiet;
-                    return res;
+                    
                 }
                 catch (Exception ex)
-                {               
-                    return ex.Message;
+                {
+                    throw ex;
                 }
             }
 
         }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
     }
 }

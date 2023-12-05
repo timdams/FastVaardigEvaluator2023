@@ -26,6 +26,10 @@
                 <TextBlock>Locatie van"Developer Command Prompt for VS 2022" startbatch bestand (VsDecCmd.bat)</TextBlock>
                 <TextBox Name="devvspathText"></TextBox>
             </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="btnSelectModelOplossing" Click="btnSelectModelOplossing_Click">Locatie modeloplossing</Button>
+                <TextBlock Name="txbLocatieModelOplossing"></TextBlock>
+            </StackPanel>
         </StackPanel>
         <Button Name="btnOkSettings" Click="btnOkSettings_Click" Grid.Row="1" Margin="20" Content="OK"/>
     </Grid>

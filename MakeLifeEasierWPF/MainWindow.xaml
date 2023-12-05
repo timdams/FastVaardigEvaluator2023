@@ -12,7 +12,6 @@
         >
     <Window.Resources>
         <convertors:EnumCompileerTestToColorConverter x:Key="boolColorConvertor"></convertors:EnumCompileerTestToColorConverter>
-
         <convertors:EnumToCheckBoxStateConvertor x:Key="enumtoCBConvertor"></convertors:EnumToCheckBoxStateConvertor>
     </Window.Resources>
     <Grid>
@@ -29,30 +28,43 @@
             <StackPanel  Name="selInfo" HorizontalAlignment="Center" >
                 <StackPanel Orientation="Horizontal"  >
                     <TextBlock Text="{Binding Path=AchterNaam}" FontWeight="ExtraBold" />
-                    
+
                     <TextBlock Text="{Binding Path=VoorNaam}" FontWeight="ExtraBold" />
                 </StackPanel>
                 <TextBlock Text="{Binding Path=SNummer}"/>
                 <TextBlock Text="{Binding Path=Klasgroep}"/>
                 <Button Name="btnBoeteCheck" Click="btnBoeteCheck_Click" Visibility="Hidden">Boetecheck trial</Button>
+                <TextBlock Name="txbCompileErrors" Text="{Binding Path=CompileErrors}" Background="{Binding Path=Boete.CompileertNiet, Converter={StaticResource boolColorConvertor}}"  ></TextBlock>
             </StackPanel>
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock>Filter/search:</TextBlock>
-                    <TextBox TextChanged="TextBox_TextChanged" Name="txbSearch" MinWidth="100" ></TextBox>
-                    
-                
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+
+
+                <StackPanel Grid.Row="0" Name="ListBoxControls" >
+                    <StackPanel Orientation="Horizontal"  >
+                        <TextBlock>Filter/search:</TextBlock>
+                        <TextBox TextChanged="TextBox_TextChanged" Name="txbSearch" MinWidth="100" ></TextBox>
+
+
+                    </StackPanel>
+                    <CheckBox Name="chkInCodeOnlySearch">Search only in code</CheckBox>
+                    <Button Name="testAll" Click="testAll_Click">Test alle projecten of ze compileren</Button>
+                    <ProgressBar x:Name="progressBar" Width="200" Height="20" Minimum="0" Maximum="1" Visibility="Collapsed"/>
+
+
+
                 </StackPanel>
-                <CheckBox Name="chkInCodeOnlySearch">Search only in code</CheckBox>
-                <Button Name="testAll" Click="testAll_Click">Test alle projecten of ze compileren</Button>
-                <ProgressBar x:Name="progressBar" Width="200" Height="20" Minimum="0" Maximum="1" Visibility="Collapsed"/>
-                <ListBox Grid.Column="0" Name="folderList" SelectionChanged="folderList_SelectionChanged">
+                <ListBox Grid.Row="1" Name="folderList" SelectionChanged="folderList_SelectionChanged" ScrollViewer.VerticalScrollBarVisibility="Visible"  >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -68,22 +80,21 @@
                                     <Button Name="btnOpenInExplorer" Click="btnOpenInExplorer_Click" FontSize="10">Explorer</Button>
                                     <Button Name="btnOpenInVS" IsEnabled="True" Click="btnOpenInVS_Click"  FontSize="10" Background="{Binding Path=Boete.CompileertNiet, Converter={StaticResource boolColorConvertor}}">Compileert?</Button>
                                 </StackPanel>
-                                </Grid>
+                            </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-            </StackPanel>
+            </Grid>
 
-          
             <Grid Grid.Column="1" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
+                </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <ComboBox SelectedIndex="0" Name="cmbCodeFilter" SelectionChanged="cmbCodeFilter_SelectionChanged" >
                     </ComboBox>
-                    
+
                 </StackPanel>
                 <avalonEdit:TextEditor Grid.Row="1"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
@@ -91,6 +102,21 @@
     FontFamily="Consolas"
     SyntaxHighlighting="C#"
     FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True" />
+
+
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock>ModelOplossing:</TextBlock>
+                <avalonEdit:TextEditor Grid.Row="1"
+   xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+   Name="modelOplossing"
+   FontFamily="Consolas" 
+   SyntaxHighlighting="C#"
+   FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True"   />
             </Grid>
         </Grid>
         <TabControl Grid.Row="2" Name="tabControl">
@@ -98,8 +124,8 @@
                 <WrapPanel Orientation="Vertical" >
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=GeenZip}" IsEnabled="false" >Geen zip</CheckBox>
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=CompileertNiet, Converter={StaticResource enumtoCBConvertor}}" IsThreeState="True">Compileert niet</CheckBox>
-                        <CheckBox IsChecked="{Binding Mode=TwoWay, Path=KlassenNietApart}">Klassen niet apart</CheckBox>
-                        <CheckBox IsChecked="{Binding Mode=TwoWay, Path=SlechteBladSpiegel}">Slechte bladspiegel</CheckBox>
+                    <CheckBox IsChecked="{Binding Mode=TwoWay, Path=KlassenNietApart}">Klassen niet apart</CheckBox>
+                    <CheckBox IsChecked="{Binding Mode=TwoWay, Path=SlechteBladSpiegel}">Slechte bladspiegel</CheckBox>
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=SlechteNaamgevingConventie}">Naamgeving niet volgens afspraken</CheckBox>
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=IncosistendeNaamgeving}">Inconsistende namageving (NL/ENG)</CheckBox>
                     <CheckBox IsChecked="{Binding Mode=TwoWay, Path=LinqGebruikt}">LINQ</CheckBox>

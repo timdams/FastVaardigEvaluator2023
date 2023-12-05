@@ -43,5 +43,16 @@ namespace MakeLifeEasierWPF
             compilerDelayText.Text = AllSettings.CompilerDelay.ToString();
             devvspathText.Text = AllSettings.DevVsPath;
         }
+
+        private void btnSelectModelOplossing_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
+            dlg.Filter = "C# files|*.cs";
+            if (dlg.ShowDialog() == true)
+            {
+                AllSettings.VerbeterSleutelPath = dlg.FileName;
+                AllSettings.SafeSettings();
+            }
+        }
     }
 }

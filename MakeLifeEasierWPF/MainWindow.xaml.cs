@@ -49,6 +49,7 @@ namespace MakeLifeEasierWPF
                 var activeSolVM = (folderList.SelectedItem as SolutionModel);
                 selInfo.DataContext = activeSolVM.Info;
                 boeteHeader.DataContext = activeSolVM.Boete;
+                txbCompileErrors.DataContext = activeSolVM;
                 if (cmbCodeFilter.SelectedIndex == 0)
                     textEditor.Text = File.ReadAllText(activeSolVM.Path);
                 else
@@ -90,6 +91,7 @@ namespace MakeLifeEasierWPF
         private void btnSettings_Click(object sender, RoutedEventArgs e)
         {
             SettingsWindow settings = new SettingsWindow(AllSettings);
+
             settings.ShowDialog();
             ReloadUI();
         }
@@ -97,7 +99,7 @@ namespace MakeLifeEasierWPF
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AllSettings = new Settings();
-
+            modelOplossing.Text = AllSettings.ModelOplossing;
             //TODO  settings wegschrijven/inladen
             ReloadUI();
 
@@ -105,6 +107,7 @@ namespace MakeLifeEasierWPF
 
         private void ReloadUI()
         {
+            modelOplossing.Text = AllSettings.ModelOplossing;
             //Filter combobox vullen met juiste hoeveelheid regions
             cmbCodeFilter.SelectionChanged -= cmbCodeFilter_SelectionChanged;
             cmbCodeFilter.Items.Clear();
@@ -180,10 +183,11 @@ namespace MakeLifeEasierWPF
 
         private void btnOpenInVS_Click(object sender, RoutedEventArgs e)
         {
-            string res = ((sender as Button).DataContext as SolutionModel).TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath);
-            if (res != "")
+            var selSol = ((sender as Button).DataContext as SolutionModel);
+            selSol.TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath);
+            if (selSol.CompileErrors != "")
             {
-                MessageBox.Show(res.ToString());
+                MessageBox.Show(selSol.CompileErrors.ToString());
 
             }
 
@@ -206,45 +210,48 @@ namespace MakeLifeEasierWPF
         public void UpdateProgressText(double percentage)
         {
             progressBar.Value = percentage;
-            
+
         }
         private async void testAll_Click(object sender, RoutedEventArgs e)
         {
-            folderList.IsEnabled = false;
-            progressBar.Visibility = Visibility.Visible;
-            IProgress<double> progress = new Progress<double>(UpdateProgressText);
-
-            try
+            if (MessageBox.Show("Dit kan lang duren.Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK)
             {
-                await Task.Run(() =>
+                ListBoxControls.IsEnabled = false;
+                folderList.IsEnabled = false;
+                progressBar.Visibility = Visibility.Visible;
+                IProgress<double> progress = new Progress<double>(UpdateProgressText);
+
+                try
                 {
-                    double teller = 0;
-                    int total = folderList.Items.Count;
-                    progress.Report(0.01);
-                    foreach (SolutionModel item in folderList.Items)
+                    await Task.Run(() =>
                     {
-                        string res = item.TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath, false);
-                        Debug.WriteLine($"Compiletest {item}:{res}");
-                        teller++;
-                        progress.Report(teller/total);
+                        double teller = 0;
+                        int total = folderList.Items.Count;
+                        progress.Report(0.01);
+                        foreach (SolutionModel item in folderList.Items)
+                        {
+                            item.TryBuildCode(AllSettings.CompilerDelay, AllSettings.DevVsPath, false);
+                            Debug.WriteLine($"Compiletest {item}:{item.CompileErrors}");
+                            teller++;
+                            progress.Report(teller / total);
+                        }
                     }
+                        );
+
                 }
-                    );
-     
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+                finally
+                {
+                    folderList.IsEnabled = true;
+                    ListBoxControls.IsEnabled = true;
+                    progressBar.Visibility = Visibility.Collapsed;
+                }
+
             }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show(ex.Message);
-            }
-            finally
-            {
-                folderList.IsEnabled = true;
-
-                progressBar.Visibility = Visibility.Collapsed;
-            }
-
-
         }
     }
 }

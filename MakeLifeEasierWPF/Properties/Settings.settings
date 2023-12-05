@@ -14,5 +14,8 @@
     <Setting Name="DevVsPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat</Value>
     </Setting>
+    <Setting Name="VerbeterSleutelPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

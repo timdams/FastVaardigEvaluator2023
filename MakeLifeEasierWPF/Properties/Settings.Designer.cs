@@ -71,5 +71,17 @@ namespace MakeLifeEasierWPF.Properties {
                 this["DevVsPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string VerbeterSleutelPath {
+            get {
+                return ((string)(this["VerbeterSleutelPath"]));
+            }
+            set {
+                this["VerbeterSleutelPath"] = value;
+            }
+        }
     }
 }

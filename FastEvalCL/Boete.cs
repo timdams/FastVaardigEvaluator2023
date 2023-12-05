@@ -17,7 +17,7 @@ namespace FastEvalCL
         private bool methodenInMethoden;
         private bool geenZip;
         private int redundanteCode;
-
+        
         //Todo scriptbased doen en dit laten inladen vanuit json file
 
         public Tested CompileertNiet
