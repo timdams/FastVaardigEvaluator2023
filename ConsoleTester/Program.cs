@@ -13,21 +13,6 @@ namespace ConsoleTester
         static void Main(string[] args)
         {
 
-            string code = @"using System;
-namespace pp_tweedezit_Hayati_Sahin
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-          Console.WriteLine(""Hallo2"");
-
-        }
-
-    }
-    
-}";
-            BuildAndRunHelper.BuildAndRun(code);
 
         }
 
