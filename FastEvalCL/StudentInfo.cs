@@ -1,6 +1,6 @@
 ﻿namespace FastEvalCL
 {
-    public class Info
+    public class StudentInfo
     {
         private string achterNaam;
         private string sNummer;

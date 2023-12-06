@@ -27,9 +27,9 @@ namespace FastEvalCL
             return codeRegions;
         }
 
-        public static Info GetInfoFromCode(string code)
+        public static StudentInfo GetInfoFromCode(string code)
         {
-            var resultInfo = new Info();
+            var resultInfo = new StudentInfo();
             var lines = code.Split(Environment.NewLine);
             foreach (var line in lines)
             {

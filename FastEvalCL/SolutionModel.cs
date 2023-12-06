@@ -14,7 +14,7 @@ namespace FastEvalCL
     {
         private Boete boete;
         private string compileErrors;
-        private Info info;
+        private StudentInfo info;
 
         public string Code { get; private set; }
         public string ProjectPath
@@ -44,7 +44,7 @@ namespace FastEvalCL
                 Info = FastEvalCL.GetInfoFromCode(Code);
             }
             else
-                Info = new Info()
+                Info = new StudentInfo()
                 {
                     AchterNaam = "Onbekend",
                     VoorNaam = "Onbekend",
@@ -62,7 +62,7 @@ namespace FastEvalCL
             }
         }
 
-        public Info Info
+        public StudentInfo Info
         {
             get => info; 
             set
