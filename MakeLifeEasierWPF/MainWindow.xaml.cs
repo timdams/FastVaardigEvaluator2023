@@ -1,4 +1,5 @@
 ﻿using FastEvalCL;
+using ICSharpCode.AvalonEdit;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MakeLifeEasierWPF
@@ -201,7 +203,7 @@ namespace MakeLifeEasierWPF
                     folderList.ItemsSource = allFiles.Where(p => p.Info.SorteerNaam.Contains(txbSearch.Text) || p.Path.Contains(txbSearch.Text)).OrderBy(p => p.Info.SorteerNaam);
                 else
                 {
-                    if (txbSearch.Text.Length > 4)
+                    if (txbSearch.Text.Length > 2)
                         folderList.ItemsSource = allFiles.Where(p => p.Code.Contains(txbSearch.Text)).OrderBy(p => p.Info.SorteerNaam);
                 }
             }
@@ -259,9 +261,52 @@ namespace MakeLifeEasierWPF
             if (folderList.SelectedItem != null)
             {
                 var activeSolVM = (folderList.SelectedItem as SolutionModel);
-                var res = activeSolVM.ComputeSimilarity(AllSettings.ModelOplossing);
+                var res = activeSolVM.ComputeSimilarity(AllSettings.ModelOplossing );
                 MessageBox.Show(res.ToString()+"%");
             }
         }
+
+        private void chkInCodeOnlySearch_Checked(object sender, RoutedEventArgs e)
+        {
+            TextBox_TextChanged(this, null);
+        }
+
+        #region avalon zoom bron: https://github.com/icsharpcode/AvalonEdit/issues/143
+        private void textEditor_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        {
+            bool ctrl = Keyboard.Modifiers == ModifierKeys.Control;
+            if (ctrl)
+            {
+                this.UpdateFontSize(e.Delta > 0, sender as TextEditor);
+                e.Handled = true;
+            }
+        }
+        // Reasonable max and min font size values
+        private const double FONT_MAX_SIZE = 60d;
+        private const double FONT_MIN_SIZE = 5d;
+
+        // Update function, increases/decreases by a specific increment
+        public void UpdateFontSize(bool increase, TextEditor EditorBox)
+        {
+            double currentSize = EditorBox.FontSize;
+
+            if (increase)
+            {
+                if (currentSize < FONT_MAX_SIZE)
+                {
+                    double newSize = Math.Min(FONT_MAX_SIZE, currentSize + 1);
+                    EditorBox.FontSize = newSize;
+                }
+            }
+            else
+            {
+                if (currentSize > FONT_MIN_SIZE)
+                {
+                    double newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
+                    EditorBox.FontSize = newSize;
+                }
+            }
+        }
+        #endregion
     }
 }

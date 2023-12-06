@@ -59,7 +59,7 @@
 
 
                     </StackPanel>
-                    <CheckBox Name="chkInCodeOnlySearch">Search only in code</CheckBox>
+                    <CheckBox Name="chkInCodeOnlySearch" Checked="chkInCodeOnlySearch_Checked" Unchecked="chkInCodeOnlySearch_Checked" >Search only in code</CheckBox>
                     <Button Name="testAll" Click="testAll_Click">Test alle projecten of ze compileren</Button>
                     <ProgressBar x:Name="progressBar" Width="200" Height="20" Minimum="0" Maximum="1" Visibility="Collapsed"/>
 
@@ -104,12 +104,12 @@ Width="8"
                     </ComboBox>
 
                 </StackPanel>
-                <avalonEdit:TextEditor Grid.Row="1"
+                <avalonEdit:TextEditor  Grid.Row="1"
     xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
     Name="textEditor"
     FontFamily="Consolas"
     SyntaxHighlighting="C#"
-    FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True" />
+    FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True" PreviewMouseWheel="textEditor_PreviewMouseWheel" />
 
 
             </Grid>
@@ -132,7 +132,7 @@ Width="8"
    Name="modelOplossing"
    FontFamily="Consolas" 
    SyntaxHighlighting="C#"
-   FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True"   />
+   FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True" PreviewMouseWheel="textEditor_PreviewMouseWheel"   />
             </Grid>
         </Grid>
         <TabControl Grid.Row="2" Name="tabControl">
