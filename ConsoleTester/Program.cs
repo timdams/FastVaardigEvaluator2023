@@ -31,7 +31,7 @@ namespace ConsoleTester
 
             //    }
             //}
-            string slnPath = @"D:\Temp\__TEST\";
+            string slnPath = @"D:\Temp\__TEST";
             var slns = SolutionHelper.LoadAllSolutionsFromPathAsync(slnPath);
             foreach (var sl in slns.Result) 
             {

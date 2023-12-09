@@ -1,6 +1,7 @@
 ﻿using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
+using System.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FastEvalCL;
@@ -8,6 +9,8 @@ namespace FastEvalCL;
 
 public class SolutionHelper
 {
+
+
     public static List<SolutionModel> LoadAllSolutionsFromPath(string folderPath, bool tryFetchInfo = true)
     {
         List<SolutionModel> result = new List<SolutionModel>();
@@ -23,11 +26,20 @@ public class SolutionHelper
     public static async Task<Solution> LoadSolutionFromPathAsync(string path)
     {
         CheckNeedRegister();
-        
+
         using (var workspace = MSBuildWorkspace.Create())
         {
-            return await workspace.OpenSolutionAsync(path);
+#if DEBUG
+            workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+#endif
+            var sln = await workspace.OpenSolutionAsync(path);
+            return sln;
         }
+    }
+
+    private static void Workspace_WorkspaceFailed(object? sender, WorkspaceDiagnosticEventArgs e)
+    {
+        Debug.WriteLine(e.Diagnostic.ToString());
     }
 
     private static void CheckNeedRegister()
@@ -35,11 +47,16 @@ public class SolutionHelper
         if (!RegistDefaultCalled)
         {
             MSBuildLocator.RegisterDefaults();
+            var q = MSBuildLocator.QueryVisualStudioInstances();
+            //Volgende lijn is ESSENTIEEL! Anders zal WPF huilen en geen projecten inladen (enkel slns)
+            //https://stackoverflow.com/questions/38204509/roslyn-throws-the-language-c-is-not-supported
+
+            var _ = typeof(Microsoft.CodeAnalysis.CSharp.Formatting.CSharpFormattingOptions);
             RegistDefaultCalled = true;
         }
     }
 
-    public static async Task<List<Solution>> LoadAllSolutionsFromPathAsync(string folderPath)
+    public static async Task<IEnumerable<Solution>> LoadAllSolutionsFromPathAsync(string folderPath)
     {
         var result = new List<Solution>();
         var allPrograms = Directory.GetFiles(folderPath, "*.sln", SearchOption.AllDirectories);
@@ -55,7 +72,7 @@ public class SolutionHelper
 
     public static async Task<IEnumerable<Diagnostic>> TestIfCompilesAsync(Project project)
     {
-        var compilation = project.GetCompilationAsync().Result;
+        var compilation =  project.GetCompilationAsync().Result;
         var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
         return errors;
     }

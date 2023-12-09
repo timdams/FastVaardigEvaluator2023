@@ -1,0 +1,93 @@
+﻿<Window x:Class="FastSLNEvaluator2024.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FastSLNEvaluator2024"
+ 
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <!-- Header -->
+            <RowDefinition></RowDefinition>
+            <!-- Main -->
+            <RowDefinition Height="auto"></RowDefinition>
+            <!-- footer -->
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Name="gridHeader">
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                    <MenuItem Header="_Load" Command="{Binding LoadSolutionsCommand}"  >
+
+                    </MenuItem>
+                    <MenuItem Header="_Settings">
+
+                    </MenuItem>
+                </Menu>
+                <TextBox AcceptsReturn="True" />
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="1" Name="gridMain">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Name="gridLeftSolutions">
+                <ListBox ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition ></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock Text="{Binding Path}" FontWeight="Bold" ></TextBlock>
+                                </StackPanel>
+                                <ListBox Height="50" Grid.Row="1" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" >
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            <Grid Grid.Column="1" Name="gridMiddleSolutions" DataContext="{Binding SelectedSolution.SelectedProject}" >
+                <ListBox ItemsSource="{Binding Files}" SelectedItem="{Binding SelectedFile}" >
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition ></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock Text="{Binding FileName}" FontWeight="Bold" ></TextBlock>
+                                </StackPanel>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            <Grid Grid.Column="2" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
+                <avalonEdit:TextEditor  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Name="textEditor"
+                                        FontFamily="Consolas"
+                                        SyntaxHighlighting="C#"
+                                        FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True"
+                                        Document="{Binding Path=CodeDocument}" />
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" Name="gridFooter">
+
+        </Grid>
+    </Grid>
+</Window>
