@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using System.Diagnostics;
+using System.Numerics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FastEvalCL;
@@ -87,7 +88,43 @@ public class SolutionHelper
     {
         var compilation = project.GetCompilationAsync().Result;
         var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
+            
         return errors;
+    }
+
+    public static async void TryBuildAndRun(Project project, string outputPath, string runtimeFileNameWithExt)
+    {
+     
+        var compilation = project.GetCompilationAsync().Result;
+        var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
+        if(errors.Count()==0)
+        {
+            //En nu compileren maar...kaarsjes branden helpt hier zeker.
+            string outputFilePath = System.IO.Path.Combine(outputPath, runtimeFileNameWithExt+ ".dll");
+            if (File.Exists(outputFilePath))
+                File.Delete(outputFilePath);
+            var res = compilation.Emit(outputFilePath);
+            if(res.Success)
+            {
+                //Nu bijhorende configfile maken zodat dotnet myfile.dll werkt later
+                string configText = @"
+                {
+                  ""runtimeOptions"": {
+                    ""tfm"": ""net6.0"",
+                    ""framework"": {
+                      ""name"": ""Microsoft.NETCore.App"",
+                      ""version"": ""6.0.0""
+                    }
+                  }
+                }"; //TODO: tricky hardcoded zo...
+                string configPath = System.IO.Path.Combine(outputPath, runtimeFileNameWithExt + ".runtimeconfig.json");
+                if (File.Exists(configPath))
+                    File.Delete(configPath);
+                File.WriteAllText(configPath, configText);
+                Process.Start("dotnet", outputFilePath);
+            }
+        }
+        
     }
 }
 
