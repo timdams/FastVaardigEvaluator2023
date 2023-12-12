@@ -10,7 +10,7 @@ namespace FastEvalCL;
 public class SolutionHelper
 {
 
-
+    static string dummyPath = "D:\\Dropbox\\PROGPROJECTS\\FastVaardigEvaluator2023\\DUMMYSLN\\DummySLN\\DummySLN.sln";//TODO in settings?
     public static List<SolutionModel> LoadAllSolutionsFromPath(string folderPath, bool tryFetchInfo = true)
     {
         List<SolutionModel> result = new List<SolutionModel>();
@@ -32,7 +32,20 @@ public class SolutionHelper
 #if DEBUG
             workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
 #endif
-            var sln = await workspace.OpenSolutionAsync(path);
+            Solution sln = null;
+            try
+            {
+                sln = await workspace.OpenSolutionAsync(path);
+            }
+            catch (Exception e)
+            {
+
+                //TODO: create dummy project that contains relevant information
+                var slnDum = await workspace.OpenSolutionAsync(dummyPath);
+                return slnDum.WithProjectName(slnDum.Projects.First().Id, "DUMMY__" + Path.GetFileName(path));
+
+            }
+
             return sln;
         }
     }
@@ -72,7 +85,7 @@ public class SolutionHelper
 
     public static async Task<IEnumerable<Diagnostic>> TestIfCompilesAsync(Project project)
     {
-        var compilation =  project.GetCompilationAsync().Result;
+        var compilation = project.GetCompilationAsync().Result;
         var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
         return errors;
     }

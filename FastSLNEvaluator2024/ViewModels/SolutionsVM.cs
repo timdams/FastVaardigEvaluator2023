@@ -9,12 +9,8 @@ namespace FastSLNEvaluator2024.ViewModels
 {
     public partial class SolutionsVM:ObservableObject
     {
-        public SolutionsVM()
-        {
-            LoadSolutionsCommand = new AsyncRelayCommand(LoadSolutionsAsync);
-        }
 
-        public IAsyncRelayCommand LoadSolutionsCommand { get;  }
+
 
         [ObservableProperty]
         private ObservableCollection<SolutionVM> solutions  = new ();
@@ -24,17 +20,25 @@ namespace FastSLNEvaluator2024.ViewModels
 
         
 
-        private async Task LoadSolutionsAsync()
+        public async Task LoadSolutionsAsync(string selectedPath)
         {
-            
-            var results = await SolutionHelper.LoadAllSolutionsFromPathAsync(@"D:\Temp\__TEST");
+            //TODO: geen hardcoded path hier
+            var results = await SolutionHelper.LoadAllSolutionsFromPathAsync(selectedPath);
             solutions.Clear();
+
+            List<SolutionVM> incoming = new List<SolutionVM>();
             foreach (var singleSln in results)
             {
-                solutions.Add(new SolutionVM(singleSln)); 
+                incoming.Add(new SolutionVM(singleSln)); 
             }
+            incoming = incoming.OrderBy(p => p.StudentInfo.SorteerNaam).ToList();
 
+            foreach (var singleSln in incoming)
+            {
+                solutions.Add(singleSln);
+            }
         }
+
 
     }
 }

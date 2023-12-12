@@ -17,6 +17,8 @@ namespace FastSLNEvaluator2024.ViewModels
         [ObservableProperty]
         private ObservableCollection<FileVM> files = new();
 
+        [ObservableProperty]
+        private bool isDummy = false;
 
         private FileVM selectedFile;
 
@@ -24,9 +26,12 @@ namespace FastSLNEvaluator2024.ViewModels
         {
             get { return selectedFile; }
             set
-            {
-                selectedFile = value;
-                selectedFile.LoadCode();
+            {if (value != null)
+                {
+                    selectedFile = value;
+                    selectedFile.LoadCode();
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -34,6 +39,9 @@ namespace FastSLNEvaluator2024.ViewModels
         public ProjectVM(Microsoft.CodeAnalysis.Project project)
         {
             name = project.Name;
+            if (name.Contains("DUMMY__"))
+                isDummy = true;
+
             files.Clear();
             foreach (Microsoft.CodeAnalysis.Document f in project.Documents)
             {
@@ -43,7 +51,7 @@ namespace FastSLNEvaluator2024.ViewModels
 
             }
             SelectedFile = files.Where(p => p.FileName.ToLower() == "program.cs").FirstOrDefault();
-            if (selectedFile == null)
+            if (SelectedFile == null)
             {
                 SelectedFile = files.FirstOrDefault();
             }

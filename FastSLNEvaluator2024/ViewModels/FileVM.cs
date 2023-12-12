@@ -12,6 +12,8 @@ using System.Windows.Navigation;
 namespace FastSLNEvaluator2024.ViewModels
 {
     using ICSharpCode.AvalonEdit.Document;
+    using System.Diagnostics;
+
     public partial class FileVM : ObservableObject
 
     {
@@ -51,6 +53,7 @@ namespace FastSLNEvaluator2024.ViewModels
 
         internal void LoadCode()
         {
+            Debug.WriteLine($"Code loaded:{fullPath}");
             Code = System.IO.File.ReadAllText(fullPath);
             codeDocument.Text = Code;
             OnPropertyChanged("CodeDocument");

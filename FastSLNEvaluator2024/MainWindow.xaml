@@ -7,7 +7,7 @@
  
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Name="allWindow" >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <!-- Header -->
@@ -19,7 +19,7 @@
         <Grid Grid.Row="0" Name="gridHeader">
             <DockPanel>
                 <Menu DockPanel.Dock="Top">
-                    <MenuItem Header="_Load" Command="{Binding LoadSolutionsCommand}"  >
+                    <MenuItem Header="_Load" Click="Load_MenuItem_Click"  >
 
                     </MenuItem>
                     <MenuItem Header="_Settings">
@@ -39,22 +39,41 @@
                 <ListBox ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid MouseRightButtonUp="Grid_MouseRightButtonUp">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition ></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0">
-                                    <TextBlock Text="{Binding Path}" FontWeight="Bold" ></TextBlock>
+                                <StackPanel Grid.Row="0" Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" ></TextBlock>
+                                        <TextBlock Text="(multiple projects)"  Visibility="{Binding ProjectsVisibility}" FontStyle="Italic" FontSize="10" HorizontalAlignment="Center" Foreground="Red"  />
+                                        <TextBlock Text="(dummy projects)"  Visibility="{Binding IsDummyProjectsVisibility}" FontStyle="Normal" FontSize="10" HorizontalAlignment="Center" Foreground="Red"  />
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding StudentInfo.AchterNaam}" ToolTip="{Binding StudentInfo.SorteerNaam}"  ></TextBlock>
+                                    <TextBlock Text="{Binding ShortPath}" ToolTip="{Binding Path}"  ></TextBlock>
                                 </StackPanel>
-                                <ListBox Height="50" Grid.Row="1" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" >
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}"></TextBlock>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
+
+                                <Grid Visibility="{Binding ProjectsVisibility}" Grid.Row="1">
+                                    <Expander  Name="expanderProject" Header="Projects:" >
+                                        <ListBox ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}"  >
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Expander>
+                                </Grid>
                             </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                    <Setter TargetName="expanderProject" Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="False">
+                                    <Setter TargetName="expanderProject" Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

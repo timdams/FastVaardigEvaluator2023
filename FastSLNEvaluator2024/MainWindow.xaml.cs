@@ -1,4 +1,6 @@
-﻿using FastSLNEvaluator2024.ViewModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using FastEvalCL;
+using FastSLNEvaluator2024.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,12 +22,33 @@ namespace FastSLNEvaluator2024
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new SolutionsVM();
+            ViewModel = new SolutionsVM();
+            this.DataContext = ViewModel ;
+        }
+        SolutionsVM ViewModel            ;
+
+        private async void Load_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Ookii.Dialogs.Wpf.VistaFolderBrowserDialog dlg = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+            //TODO: uit settings halen
+            //dlg.SelectedPath = AllSettings.LastSelectedFolder;
+
+            if (dlg.ShowDialog() == true)
+            {
+                //AllSettings.LastSelectedFolder = dlg.SelectedPath;
+                // AllSettings.SafeSettings();
+                allWindow.IsEnabled = false;
+                //  string[] allfiles = Directory.GetFiles(dlg.SelectedPath, "Program.cs", SearchOption.AllDirectories);
+
+                await ViewModel.LoadSolutionsAsync(dlg.SelectedPath);
+
+                allWindow.IsEnabled = true;
+            }
         }
 
-        private void TextBlock_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-
+            MessageBox.Show("Use me");
         }
     }
 }
