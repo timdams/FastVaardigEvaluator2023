@@ -10,7 +10,7 @@ namespace FastEvalCL;
 
 public class SolutionHelper
 {
-
+    //TODO: change meeee
     static string dummyPath = "D:\\Dropbox\\PROGPROJECTS\\FastVaardigEvaluator2023\\DUMMYSLN\\DummySLN\\DummySLN.sln";//TODO in settings?
     public static List<SolutionModel> LoadAllSolutionsFromPath(string folderPath, bool tryFetchInfo = true)
     {

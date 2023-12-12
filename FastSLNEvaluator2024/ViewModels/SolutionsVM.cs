@@ -18,7 +18,6 @@ namespace FastSLNEvaluator2024.ViewModels
         [ObservableProperty]
         private SolutionVM selectedSolution;
 
-        
 
         public async Task LoadSolutionsAsync(string selectedPath)
         {

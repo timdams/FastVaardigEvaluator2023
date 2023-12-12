@@ -35,9 +35,10 @@ namespace FastSLNEvaluator2024.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        public Microsoft.CodeAnalysis.Project MSBuildProject { get; private set; }
         public ProjectVM(Microsoft.CodeAnalysis.Project project)
         {
+            MSBuildProject = project;
             name = project.Name;
             if (name.Contains("DUMMY__"))
                 isDummy = true;

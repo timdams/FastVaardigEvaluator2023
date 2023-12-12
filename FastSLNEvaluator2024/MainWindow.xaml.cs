@@ -50,5 +50,13 @@ namespace FastSLNEvaluator2024
         {
             MessageBox.Show("Use me");
         }
+
+        private void TestWelkeCompileren_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var item in ViewModel.Solutions)
+            {
+                item.TestIfCompiles();
+            }
+        }
     }
 }

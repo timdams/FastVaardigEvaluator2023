@@ -40,20 +40,18 @@ namespace FastSLNEvaluator2024.ViewModels
         {
             get
             {
-                if (projects.Count > 1  )
+                if (projects.Count > 1)
                     return Visibility.Visible;
                 else return Visibility.Collapsed;
             }
         }
-
-       
 
 
         public Visibility IsDummyProjectsVisibility
         {
             get
             {
-                if ( projects.Count==1 && projects.First().IsDummy)
+                if (projects.Count == 1 && projects.First().IsDummy)
                     return Visibility.Visible;
                 else return Visibility.Collapsed;
             }
@@ -61,9 +59,9 @@ namespace FastSLNEvaluator2024.ViewModels
 
         public SolutionVM(Microsoft.CodeAnalysis.Solution singeSln)
         {
-            
+
             path = singeSln.FilePath;
-            
+
             //TODOdummy info nnaar ui bre nnge
             projects.Clear();
             foreach (Microsoft.CodeAnalysis.Project proj in singeSln.Projects)
@@ -82,16 +80,32 @@ namespace FastSLNEvaluator2024.ViewModels
         internal void LoadAdditionalInfo()
         {
             var proj = projects.FirstOrDefault();
-            if(proj != null)
+            if (proj != null)
             {
-                var programcs= proj.Files.Where(p => p.FileName.ToLower() == "program.cs").FirstOrDefault();
+                var programcs = proj.Files.Where(p => p.FileName.ToLower() == "program.cs").FirstOrDefault();
                 if (programcs != null)
                 {
                     studentInfo = FastEvalCL.FastEvalCL.GetInfoFromCode(programcs.Code);
-                    
+
                     OnPropertyChanged("StudentInfo");
                 }
-                
+
+            }
+        }
+        [ObservableProperty]
+        private string compileColorStatus = "White";
+
+        public void TestIfCompiles()
+        {
+            if(selectedProject!=null)
+            {
+                var res= SolutionHelper.TestIfCompilesAsync(selectedProject.MSBuildProject);
+                if (res.Result.Count() == 0)
+                    compileColorStatus = "Green";
+                else compileColorStatus = "Red";
+
+                OnPropertyChanged("CompileColorStatus");
+                //TODO: compile erros naar UI brengen 
             }
         }
     }
