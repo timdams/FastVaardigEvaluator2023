@@ -25,18 +25,21 @@
                     <MenuItem Header="_Settings">
 
                     </MenuItem>
-                    <MenuItem Header="_Test welke compileren" Click="TestWelkeCompileren_Click"></MenuItem>
+                    <MenuItem Header="_Test alle slns op compileren" Click="TestWelkeCompileren_Click"></MenuItem>
                 </Menu>
-                <TextBox AcceptsReturn="True" />
+
             </DockPanel>
         </Grid>
         <Grid Grid.Row="1" Name="gridMain">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="21*"></ColumnDefinition>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="29*"></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="29*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Name="gridLeftSolutions">
+            <Grid Grid.Column="0" Name="gridLeftSolutions" Grid.ColumnSpan="2">
                 <ListBox ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -79,7 +82,13 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <Grid Grid.Column="1" Name="gridMiddleSolutions" DataContext="{Binding SelectedSolution.SelectedProject}" >
+            <GridSplitter Grid.Column="2"
+       HorizontalAlignment="Center"
+       Background="DarkGray" 
+ShowsPreview="True"
+Width="8"
+       />
+            <Grid Grid.Column="2" Name="gridMiddleSolutions" DataContext="{Binding SelectedSolution.SelectedProject}" Grid.ColumnSpan="3" Margin="8,0,8,0" >
                 <ListBox ItemsSource="{Binding Files}" SelectedItem="{Binding SelectedFile}" >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -97,13 +106,22 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <Grid Grid.Column="2" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
+
+            <GridSplitter Grid.Column="4"
+       HorizontalAlignment="Center"
+       Background="DarkGray" 
+ShowsPreview="True"
+Width="8"
+       />
+            <Grid Grid.Column="5" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
                 <avalonEdit:TextEditor  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="textEditor"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="C#"
                                         FontSize="10pt" WordWrap="True" ShowLineNumbers="True" IsReadOnly="True"
-                                        Document="{Binding Path=CodeDocument}" />
+                                        Document="{Binding Path=CodeDocument}"
+                                        PreviewMouseWheel="textEditor_PreviewMouseWheel"
+                                        />
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Name="gridFooter">
