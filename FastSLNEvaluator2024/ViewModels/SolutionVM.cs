@@ -107,7 +107,7 @@ namespace FastSLNEvaluator2024.ViewModels
                     if (alsoRun)
                     {
                         //TODO dotnet versie uit settings halen
-                        SolutionHelper.TryBuildAndRun(selectedProject.MSBuildProject, "tempRun", selectedProject.Name, SolutionHelper.DotNetVersions.NET6);
+                        SolutionHelper.TryBuildAndRun(selectedProject.MSBuildProject, "tempRun", selectedProject.Name, SolutionHelper.DotNetVersions.NET7);
                     }
                 }
                 else

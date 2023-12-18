@@ -89,9 +89,9 @@ public class SolutionHelper
 
 
 
-    public enum DotNetVersions {NET8, NET7, NET6, NET5};
+    public enum DotNetVersions { NET8, NET7, NET6, NET5 };
     //TODO versie vragen via settings in UI
-    public static async void TryBuildAndRun(Microsoft.CodeAnalysis.Project project, string outputPath, string runtimeFileNameWithExt, DotNetVersions dotNetVersion= DotNetVersions.NET6 )
+    public static async void TryBuildAndRun(Microsoft.CodeAnalysis.Project project, string outputPath, string runtimeFileNameWithExt, DotNetVersions dotNetVersion = DotNetVersions.NET6)
     {
 
         var compilation = project.GetCompilationAsync().Result;
@@ -108,12 +108,19 @@ public class SolutionHelper
             if (res.Success)
             {
                 //Nu bijhorende configfile maken zodat dotnet myfile.dll werkt later
-                           string configText = GenerateJSONConfigText(dotNetVersion);
+                string configText = GenerateJSONConfigText(dotNetVersion);
                 string configPath = System.IO.Path.Combine(outputPath, runtimeFileNameWithExt + ".runtimeconfig.json");
                 if (File.Exists(configPath))
                     File.Delete(configPath);
                 File.WriteAllText(configPath, configText);
-                Process.Start("dotnet", outputFilePath);
+
+                Process p = new Process();
+                ProcessStartInfo psi = new ProcessStartInfo();
+                psi.FileName = "dotnet";
+                psi.Arguments = outputFilePath;
+                p.StartInfo = psi;
+                p.Start();
+                p.WaitForExit();
             }
         }
 
