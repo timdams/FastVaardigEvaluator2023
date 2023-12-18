@@ -62,10 +62,16 @@ namespace FastSLNEvaluator2024
         {
             if (MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
+                //TODO backgroundworker needs a job?! This is definitely one!
+                allWindow.IsEnabled = false;
+
+                loadingRing.Visibility = Visibility.Visible;
                 foreach (var item in ViewModel.Solutions)
                 {
                     item.TestIfCompiles();
                 }
+                loadingRing.Visibility = Visibility.Collapsed;
+                allWindow.IsEnabled = true;
             }
         }
 

@@ -21,7 +21,7 @@
                 <Menu DockPanel.Dock="Top">
                     <ui:MenuItem Header="_Load" Click="Load_MenuItem_Click"  >
                     </ui:MenuItem>
-                    <ui:MenuItem Header="_Settings">
+                    <ui:MenuItem Header="_Settings" Visibility="Hidden">
                     </ui:MenuItem>
                     <ui:MenuItem Header="_Test alle slns op compileren" Click="TestWelkeCompileren_Click"></ui:MenuItem>
                 </Menu>
@@ -62,8 +62,8 @@
                                     <StackPanel Grid.Row="0" Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}" FontWeight="Bold" ></TextBlock>
-                                            <TextBlock Text="(multiple projects)"  Visibility="{Binding ProjectsVisibility}" FontStyle="Italic" FontSize="10" HorizontalAlignment="Center" Foreground="Red"  />
-                                            <TextBlock Text="(dummy projects)"  Visibility="{Binding IsDummyProjectsVisibility}" FontStyle="Normal" FontSize="10" HorizontalAlignment="Center" Foreground="Red"  />
+                                            <ui:SymbolIcon Symbol="AddSquareMultiple16" Visibility="{Binding ProjectsVisibility}" ToolTip="Multiple projects" Filled="True" Foreground="Orange"/>
+                                            <ui:SymbolIcon Symbol="StarOff12" ToolTip="Dummy project. (couldn't load original file)" Visibility="{Binding IsDummyProjectsVisibility}" Filled="True" Foreground="Red"/>
                                         </StackPanel>
                                         <TextBlock Text="{Binding StudentInfo.AchterNaam}" ToolTip="{Binding StudentInfo.SorteerNaam}"  ></TextBlock>
                                         <TextBlock Text="{Binding ShortPath}" ToolTip="{Binding Path}"  ></TextBlock>
