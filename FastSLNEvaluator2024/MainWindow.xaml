@@ -82,7 +82,18 @@
                                     </Grid>
                                 </Grid>
                                 <Grid Grid.Column="2">
-                                    <Button Name="tryRunProj" Click="tryRunProj_Click" IsEnabled="{Binding CanRun}" >Run</Button>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Name="tryRunProj" Click="tryRunProj_Click" IsEnabled="{Binding CanRun}" ToolTip="Try to compile and run (selected) project"  >
+                                            <ui:SymbolIcon Symbol="Play16" Foreground="Green" Filled="True"/>
+                                        </Button>
+                                        <Button Name="openExplore" Click="openExplore_Click" ToolTip="Open folder in explorer">
+                                            <ui:SymbolIcon Symbol="FolderOpen24"/>
+                                        </Button>
+                                        <Button Name="openVS" Click="openVS_Click" ToolTip="Open in Visual Studio"      >
+                                            <ui:SymbolIcon Symbol="OpenFolder48" Foreground="Purple" Filled="True"/>
+                                        </Button>
+                                   
+                                    </StackPanel>
                                 </Grid>
                             </Grid>
                             <DataTemplate.Triggers>

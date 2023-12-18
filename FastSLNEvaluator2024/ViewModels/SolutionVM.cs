@@ -3,6 +3,7 @@ using FastEvalCL;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -139,6 +140,16 @@ namespace FastSLNEvaluator2024.ViewModels
         internal void TryRun()
         {
             TestIfCompiles(true);
+        }
+
+        internal void OpenInExplorer()
+        {
+            Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
+        }
+
+        internal void OpenInVS()
+        {
+            Process.Start("explorer.exe", path);
         }
     }
 }

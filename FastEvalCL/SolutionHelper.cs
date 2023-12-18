@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Locator;
+﻿using Microsoft.Build.Framework.Profiler;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using System.Diagnostics;
@@ -10,14 +11,15 @@ namespace FastEvalCL;
 public class SolutionHelper
 {
     //TODO: change meeee
-    static string dummyPath = "D:\\Dropbox\\PROGPROJECTS\\FastVaardigEvaluator2023\\DUMMYSLN\\DummySLN\\DummySLN.sln";//TODO in settings?
+    static string dummyPath = "data\\DummyProject\\DummySLN.sln";
     public static List<SolutionModel> LoadAllSolutionsFromPath(string folderPath, bool tryFetchInfo = true)
     {
         List<SolutionModel> result = new List<SolutionModel>();
         var allPrograms = Directory.GetFiles(folderPath, "Program.cs", SearchOption.AllDirectories);
         foreach (var prog in allPrograms)
         {
-            result.Add(new SolutionModel(prog, tryFetchInfo));
+
+                result.Add(new SolutionModel(prog, tryFetchInfo));   
         }
         return result;
     }
@@ -41,6 +43,8 @@ public class SolutionHelper
             {
 
                 //TODO: create dummy project that contains relevant information
+                //TODO fucking macos
+                Debug.WriteLine("Creating dummy for:" + path);
                 var slnDum = await workspace.OpenSolutionAsync(dummyPath);
                 return slnDum.WithProjectName(slnDum.Projects.First().Id, "DUMMY__" + Path.GetFileName(path));
 
@@ -75,8 +79,11 @@ public class SolutionHelper
         var allPrograms = Directory.GetFiles(folderPath, "*.sln", SearchOption.AllDirectories);
         foreach (var prog in allPrograms)
         {
-            var sl = await LoadSolutionFromPathAsync(prog);
-            result.Add(sl);
+            if (!prog.Contains("__MACOSX")) //soort shadow/git map op macosx waar onbruikbare sln in zit...danku apple
+            {
+                var sl = await LoadSolutionFromPathAsync(prog);
+                result.Add(sl);
+            }
             //TODO fetch info hier?? ni echt goeie oop
 
         }

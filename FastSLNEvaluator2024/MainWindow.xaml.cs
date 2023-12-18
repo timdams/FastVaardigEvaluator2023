@@ -113,5 +113,15 @@ namespace FastSLNEvaluator2024
         {
            ( (sender as Button).DataContext as SolutionVM).TryRun();
         }
+
+        private void openExplore_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as SolutionVM).OpenInExplorer();
+        }
+
+        private void openVS_Click(object sender, RoutedEventArgs e)
+        {
+            ((sender as Button).DataContext as SolutionVM).OpenInVS();
+        }
     }
 }
