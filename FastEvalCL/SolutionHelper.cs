@@ -2,8 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using System.Diagnostics;
-using System.Numerics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+
 
 namespace FastEvalCL;
 
@@ -101,6 +100,8 @@ public class SolutionHelper
         {
             //En nu compileren maar...kaarsjes branden helpt hier zeker.
             string outputFilePath = System.IO.Path.Combine(outputPath, runtimeFileNameWithExt+ ".dll");
+            if (!Directory.Exists(outputPath))
+                Directory.CreateDirectory(outputPath);
             if (File.Exists(outputFilePath))
                 File.Delete(outputFilePath);
             var res = compilation.Emit(outputFilePath);

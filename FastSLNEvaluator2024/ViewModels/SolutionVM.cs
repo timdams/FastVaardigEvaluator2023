@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using static System.Net.WebRequestMethods;
 
 namespace FastSLNEvaluator2024.ViewModels
@@ -62,7 +63,7 @@ namespace FastSLNEvaluator2024.ViewModels
 
             path = singeSln.FilePath;
 
-            //TODOdummy info nnaar ui bre nnge
+            //TODO dummy info naar ui brengen
             projects.Clear();
             foreach (Microsoft.CodeAnalysis.Project proj in singeSln.Projects)
             {
@@ -79,6 +80,7 @@ namespace FastSLNEvaluator2024.ViewModels
 
         internal void LoadAdditionalInfo()
         {
+            //Read comment tags from first project
             var proj = projects.FirstOrDefault();
             if (proj != null)
             {
@@ -93,20 +95,50 @@ namespace FastSLNEvaluator2024.ViewModels
             }
         }
         [ObservableProperty]
-        private string compileColorStatus = "White";
+        private bool canRun = true;
+        
+        [ObservableProperty]
+        private Visibility visibilityCompileError = Visibility.Collapsed;
 
-        public void TestIfCompiles()
+        [ObservableProperty]
+        private string compileErrors = "";
+
+        public void TestIfCompiles(bool alsoRun=false)
         {
             if(selectedProject!=null)
             {
                 var res= SolutionHelper.TestIfCompilesAsync(selectedProject.MSBuildProject);
                 if (res.Result.Count() == 0)
-                    compileColorStatus = "Green";
-                else compileColorStatus = "Red";
+                { visibilityCompileError = Visibility.Collapsed; 
+                
+                    if(alsoRun)
+                    {
 
-                OnPropertyChanged("CompileColorStatus");
-                //TODO: compile erros naar UI brengen 
+                        SolutionHelper.TryBuildAndRun(selectedProject.MSBuildProject, "tempRun", selectedProject.Name);
+                    }
+                }
+                else
+                {
+                    visibilityCompileError = Visibility.Visible;
+                    string errorText = "";
+                    foreach (var line in res.Result)
+                    {
+                        errorText += line.ToString(); //Todo meer propere output
+                    }
+                    compileErrors = errorText;
+                    canRun = false;
+
+                }
+                OnPropertyChanged("CompileErrors");
+                OnPropertyChanged("CanRun");
+                OnPropertyChanged("VisibilityCompileError");
+                //TODO: compile errors naar UI brengen 
             }
+        }
+
+        internal void TryRun()
+        {
+            TestIfCompiles(true);
         }
     }
 }

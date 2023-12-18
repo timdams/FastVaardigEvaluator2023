@@ -41,10 +41,10 @@ namespace FastSLNEvaluator2024
                 // AllSettings.SafeSettings();
                 allWindow.IsEnabled = false;
 
-
+                loadingRing.Visibility = Visibility.Visible;
                 //TODO projecten in achtergrond beginnen inladen op aparte thread 
                 await ViewModel.LoadSolutionsAsync(dlg.SelectedPath);
-
+                loadingRing.Visibility = Visibility.Collapsed;
                 allWindow.IsEnabled = true;
                 if (ViewModel.Solutions.Count() == 0)
                 {
@@ -109,5 +109,9 @@ namespace FastSLNEvaluator2024
         }
         #endregion
 
+        private void tryRunProj_Click(object sender, RoutedEventArgs e)
+        {
+           ( (sender as Button).DataContext as SolutionVM).TryRun();
+        }
     }
 }
