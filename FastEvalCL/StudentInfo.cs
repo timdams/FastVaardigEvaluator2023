@@ -1,6 +1,6 @@
 ﻿namespace FastEvalCL
 {
-    
+
     public class StudentInfo
     {
         private string achterNaam;
@@ -8,7 +8,8 @@
         private string voorNaam;
         private string klasgroep;
 
-        public string SNummer {
+        public string SNummer
+        {
             get
             {
                 if (sNummer == "" || sNummer == null) return "ONBEKENDSNUM";
@@ -16,7 +17,8 @@
             }
             set => sNummer = value;
         }
-        public string VoorNaam {
+        public string VoorNaam
+        {
             get
             {
                 if (voorNaam == "" || voorNaam == null) return "ONBEKENDVNAAM";
@@ -33,7 +35,8 @@
             }
             set => achterNaam = value;
         }
-        public string Klasgroep {
+        public string Klasgroep
+        {
             get
             {
                 if (klasgroep == "" || klasgroep == null) return "ONBEKENDKLGROEP";

@@ -1,17 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FastEvalCL;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 namespace FastSLNEvaluator2024.ViewModels
 {
@@ -97,25 +88,26 @@ namespace FastSLNEvaluator2024.ViewModels
         }
         [ObservableProperty]
         private bool canRun = true;
-        
+
         [ObservableProperty]
         private Visibility visibilityCompileError = Visibility.Collapsed;
 
         [ObservableProperty]
         private string compileErrors = "";
 
-        public void TestIfCompiles(bool alsoRun=false)
+        public void TestIfCompiles(bool alsoRun = false)
         {
-            if(selectedProject!=null)
+            if (selectedProject != null)
             {
-                var res= SolutionHelper.TestIfCompilesAsync(selectedProject.MSBuildProject);
+                var res = SolutionHelper.TestIfCompilesAsync(selectedProject.MSBuildProject);
                 if (res.Result.Count() == 0)
-                { visibilityCompileError = Visibility.Collapsed; 
-                
-                    if(alsoRun)
-                    {
+                {
+                    visibilityCompileError = Visibility.Collapsed;
 
-                        SolutionHelper.TryBuildAndRun(selectedProject.MSBuildProject, "tempRun", selectedProject.Name);
+                    if (alsoRun)
+                    {
+                        //TODO dotnet versie uit settings halen
+                        SolutionHelper.TryBuildAndRun(selectedProject.MSBuildProject, "tempRun", selectedProject.Name, SolutionHelper.DotNetVersions.NET6);
                     }
                 }
                 else
@@ -124,7 +116,7 @@ namespace FastSLNEvaluator2024.ViewModels
                     string errorText = "";
                     foreach (var line in res.Result)
                     {
-                        errorText += line.ToString(); //Todo meer propere output
+                        errorText += line.ToString(); //TODO meer propere output
                     }
                     compileErrors = errorText;
                     canRun = false;
@@ -133,7 +125,7 @@ namespace FastSLNEvaluator2024.ViewModels
                 OnPropertyChanged("CompileErrors");
                 OnPropertyChanged("CanRun");
                 OnPropertyChanged("VisibilityCompileError");
-                //TODO: compile errors naar UI brengen 
+                //TODO compile errors naar UI brengen 
             }
         }
 

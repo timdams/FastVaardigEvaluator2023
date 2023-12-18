@@ -1,17 +1,8 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
-using FastEvalCL;
-using FastSLNEvaluator2024.ViewModels;
+﻿using FastSLNEvaluator2024.ViewModels;
 using ICSharpCode.AvalonEdit;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FastSLNEvaluator2024
 {
@@ -20,6 +11,7 @@ namespace FastSLNEvaluator2024
     /// </summary>
     public partial class MainWindow : Window
     {
+        //TODO search box
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +23,7 @@ namespace FastSLNEvaluator2024
         private async void Load_MenuItem_Click(object sender, RoutedEventArgs e)
         {
             Ookii.Dialogs.Wpf.VistaFolderBrowserDialog dlg = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
-            //TODO: uit settings halen
+            //TODO uit settings halen
             //dlg.SelectedPath = AllSettings.LastSelectedFolder;
 
             if (dlg.ShowDialog() == true)
@@ -117,7 +109,7 @@ namespace FastSLNEvaluator2024
 
         private void tryRunProj_Click(object sender, RoutedEventArgs e)
         {
-           ( (sender as Button).DataContext as SolutionVM).TryRun();
+            ((sender as Button).DataContext as SolutionVM).TryRun();
         }
 
         private void openExplore_Click(object sender, RoutedEventArgs e)

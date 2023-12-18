@@ -1,14 +1,5 @@
 ﻿using FastEvalCL;
-
-using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
-using Microsoft.CodeAnalysis.MSBuild;
-using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.Drawing;
-using System.Reflection;
 
 namespace ConsoleTester
 {
@@ -33,20 +24,20 @@ namespace ConsoleTester
             //}
             string slnPath = @"C:\temp\___unz";
             var slns = SolutionHelper.LoadAllSolutionsFromPathAsync(slnPath);
-            foreach (var sl in slns.Result) 
+            foreach (var sl in slns.Result)
             {
-                
+
                 var error = SolutionHelper.TestIfCompilesAsync(sl.Projects.First());
                 if (error.Result.Count() != 0)
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
-                    Console.WriteLine("DID NOT COMPILE:"+sl.FilePath);
+                    Console.WriteLine("DID NOT COMPILE:" + sl.FilePath);
 
                 }
                 else
                 {
                     Console.BackgroundColor = ConsoleColor.Green;
-                    Console.WriteLine( "DID COMPILE:"+ sl.FilePath);
+                    Console.WriteLine("DID COMPILE:" + sl.FilePath);
                     SolutionHelper.TryBuildAndRun(sl.Projects.First(), @"c:\temp\_run", sl.Projects.First().Name);
                 }
                 Console.ResetColor();

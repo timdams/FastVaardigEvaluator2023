@@ -1,13 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using ICSharpCode.AvalonEdit;
 using Microsoft.CodeAnalysis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Navigation;
 
 namespace FastSLNEvaluator2024.ViewModels
 {
@@ -22,7 +14,7 @@ namespace FastSLNEvaluator2024.ViewModels
         public string FileName { get => System.IO.Path.GetFileName(f.FilePath); }
 
         [ObservableProperty]
-        private string code; 
+        private string code;
 
         [ObservableProperty]
         private string fullPath;
@@ -46,9 +38,9 @@ namespace FastSLNEvaluator2024.ViewModels
             this.f = f;
 
             fullPath = f.FilePath;
-            
+
             codeDocument = new TextDocument();
-            
+
         }
 
         internal void LoadCode()
@@ -58,6 +50,6 @@ namespace FastSLNEvaluator2024.ViewModels
             codeDocument.Text = Code;
             OnPropertyChanged("CodeDocument");
         }
-    
+
     }
 }

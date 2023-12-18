@@ -1,11 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FastSLNEvaluator2024.ViewModels
 {
@@ -26,7 +20,8 @@ namespace FastSLNEvaluator2024.ViewModels
         {
             get { return selectedFile; }
             set
-            {if (value != null)
+            {
+                if (value != null)
                 {
                     selectedFile = value;
                     selectedFile.LoadCode();
@@ -46,7 +41,7 @@ namespace FastSLNEvaluator2024.ViewModels
             files.Clear();
             foreach (Microsoft.CodeAnalysis.Document f in project.Documents)
             {
-                if (!f.FilePath.Contains(@"\obj\Debug\")) //TODO: elders definieren (settings?)
+                if (!f.FilePath.Contains(@"\obj\Debug\")) //TODO elders definieren (settings?)
                     files.Add(new FileVM(f));
 
 
