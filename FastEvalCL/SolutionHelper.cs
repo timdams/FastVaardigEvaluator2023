@@ -53,11 +53,13 @@ public class SolutionHelper
         if (!RegistDefaultCalled)
         {
             MSBuildLocator.RegisterDefaults();
-            var q = MSBuildLocator.QueryVisualStudioInstances();
-            //Volgende lijn is ESSENTIEEL! Anders zal WPF huilen en geen projecten inladen (enkel slns)
-            //https://stackoverflow.com/questions/38204509/roslyn-throws-the-language-c-is-not-supported
+            //Geen idee waarom deze lijn hier ooit moest staan. Ik hou ze hier in de buurt for future Dams. Go get'm Tiger!
+            //  var q = MSBuildLocator.QueryVisualStudioInstances();
 
+            //Volgende lijn is ESSENTIEEL! Anders zal WPF huilen en geen projecten inladen (enkel slns). Meer info op:
+            //https://stackoverflow.com/questions/38204509/roslyn-throws-the-language-c-is-not-supported
             var _ = typeof(Microsoft.CodeAnalysis.CSharp.Formatting.CSharpFormattingOptions);
+            
             RegistDefaultCalled = true;
         }
     }
@@ -93,13 +95,12 @@ public class SolutionHelper
     //TODO versie vragen via settings in UI
     public static async void TryBuildAndRun(Microsoft.CodeAnalysis.Project project, string outputPath, string runtimeFileNameWithExt, DotNetVersions dotNetVersion = DotNetVersions.NET6)
     {
-
         var compilation = project.GetCompilationAsync().Result;
         var errors = compilation.GetDiagnostics().Where(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
         if (errors.Count() == 0)
         {
             //En nu compileren maar...kaarsjes branden helpt hier zeker.
-            string outputFilePath = System.IO.Path.Combine(outputPath, runtimeFileNameWithExt + ".dll");
+            string outputFilePath = Path.Combine(outputPath, runtimeFileNameWithExt + ".dll");
             if (!Directory.Exists(outputPath))
                 Directory.CreateDirectory(outputPath);
             if (File.Exists(outputFilePath))
@@ -109,16 +110,13 @@ public class SolutionHelper
             {
                 //Nu bijhorende configfile maken zodat dotnet myfile.dll werkt later
                 string configText = GenerateJSONConfigText(dotNetVersion);
-                string configPath = System.IO.Path.Combine(outputPath, runtimeFileNameWithExt + ".runtimeconfig.json");
-                if (File.Exists(configPath))
-                    File.Delete(configPath);
+                string configPath = Path.Combine(outputPath, runtimeFileNameWithExt + ".runtimeconfig.json");
+                if (File.Exists(configPath)) { File.Delete(configPath); }
+
                 File.WriteAllText(configPath, configText);
 
-                Process p = new Process();
-                ProcessStartInfo psi = new ProcessStartInfo();
-                psi.FileName = "dotnet";
-                psi.Arguments = outputFilePath;
-                p.StartInfo = psi;
+                ProcessStartInfo psi = new ProcessStartInfo() { FileName = "dotnet", Arguments = outputFilePath };
+                Process p = new Process() { StartInfo = psi };
                 p.Start();
                 p.WaitForExit();
             }

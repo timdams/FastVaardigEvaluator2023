@@ -52,18 +52,13 @@ namespace FastSLNEvaluator2024
 
         private void TestWelkeCompileren_Click(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            {
-                //TODO backgroundworker needs a job?! This is definitely one!
-                allWindow.IsEnabled = false;
-
-                loadingRing.Visibility = Visibility.Visible;
+            if (ViewModel.Solutions.Count<5 ||MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            { 
                 foreach (var item in ViewModel.Solutions)
                 {
-                    item.TestIfCompiles();
+
+                    Task.Run(()=>item.TestIfCompilesAndRun());
                 }
-                loadingRing.Visibility = Visibility.Collapsed;
-                allWindow.IsEnabled = true;
             }
         }
 

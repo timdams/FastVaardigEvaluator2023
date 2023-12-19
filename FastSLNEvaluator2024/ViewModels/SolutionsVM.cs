@@ -1,6 +1,4 @@
-﻿
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FastEvalCL;
 using System.Collections.ObjectModel;
 
@@ -8,8 +6,6 @@ namespace FastSLNEvaluator2024.ViewModels
 {
     public partial class SolutionsVM : ObservableObject
     {
-
-
 
         [ObservableProperty]
         private ObservableCollection<SolutionVM> solutions = new();
@@ -24,17 +20,14 @@ namespace FastSLNEvaluator2024.ViewModels
             var results = await SolutionHelper.LoadAllSolutionsFromPathAsync(selectedPath);
             solutions.Clear();
 
-            List<SolutionVM> incoming = new List<SolutionVM>();
-            foreach (var singleSln in results)
-            {
-                incoming.Add(new SolutionVM(singleSln));
-            }
-            incoming = incoming.OrderBy(p => p.StudentInfo.SorteerNaam).ToList();
+            var sortedIncoming = results.Select(singleSln => new SolutionVM(singleSln))
+                            .OrderBy(p => p.StudentInfo.SorteerNaam);
 
-            foreach (var singleSln in incoming)
+            foreach (var item in sortedIncoming)
             {
-                solutions.Add(singleSln);
+                solutions.Add(item);
             }
+
         }
 
 

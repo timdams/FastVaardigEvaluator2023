@@ -79,7 +79,7 @@ namespace FastSLNEvaluator2024.ViewModels
                 var programcs = proj.Files.Where(p => p.FileName.ToLower() == "program.cs").FirstOrDefault();
                 if (programcs != null)
                 {
-                    studentInfo = FastEvalCL.FastEvalCL.GetInfoFromCode(programcs.Code);
+                    studentInfo = FastEvalCL.RegionHelper.GetInfoFromCode(programcs.Code);
 
                     OnPropertyChanged("StudentInfo");
                 }
@@ -95,12 +95,12 @@ namespace FastSLNEvaluator2024.ViewModels
         [ObservableProperty]
         private string compileErrors = "";
 
-        public void TestIfCompiles(bool alsoRun = false)
+        public async void TestIfCompilesAndRun(bool alsoRun = false)
         {
             if (selectedProject != null)
             {
-                var res = SolutionHelper.TestIfCompilesAsync(selectedProject.MSBuildProject);
-                if (res.Result.Count() == 0)
+                var res =await SolutionHelper.TestIfCompilesAsync(selectedProject.MSBuildProject);
+                if (res.Count() == 0)
                 {
                     visibilityCompileError = Visibility.Collapsed;
 
@@ -114,7 +114,7 @@ namespace FastSLNEvaluator2024.ViewModels
                 {
                     visibilityCompileError = Visibility.Visible;
                     string errorText = "";
-                    foreach (var line in res.Result)
+                    foreach (var line in res)
                     {
                         errorText += line.ToString(); //TODO meer propere output
                     }
@@ -125,13 +125,13 @@ namespace FastSLNEvaluator2024.ViewModels
                 OnPropertyChanged("CompileErrors");
                 OnPropertyChanged("CanRun");
                 OnPropertyChanged("VisibilityCompileError");
-                //TODO compile errors naar UI brengen 
+                
             }
         }
 
         internal void TryRun()
         {
-            TestIfCompiles(true);
+            TestIfCompilesAndRun(true);
         }
 
         internal void OpenInExplorer()

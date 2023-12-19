@@ -2,7 +2,7 @@
 
 namespace FastEvalCL
 {
-    public class FastEvalCL
+    public class RegionHelper
     {
         //https://stackoverflow.com/questions/4766414/parsing-regions-within-code-files 
         public static List<string> GetCodeRegions(string code)

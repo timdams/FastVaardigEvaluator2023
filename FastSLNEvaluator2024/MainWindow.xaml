@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FastSLNEvaluator2024"
- xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"   >
+        Title="AP OOP Solution Navigator" Height="900" Width="1300"   >
     <Grid Name="allWindow" >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -30,11 +29,11 @@
         <ui:ProgressRing IsIndeterminate="True" Grid.Row="1" Visibility="Hidden" Name="loadingRing" />
         <Grid Grid.Row="1" Name="gridMain">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="12*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Name="gridLeftSolutions" >
                 <ListBox ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
@@ -42,25 +41,21 @@
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="30"></ColumnDefinition>
-                                    <ColumnDefinition ></ColumnDefinition>
-                                    <ColumnDefinition ></ColumnDefinition>
+                                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                                    <ColumnDefinition Width="2*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <Grid Grid.Column="0">
-                                    <StackPanel Orientation="Vertical">
-                                        <ui:SymbolIcon Symbol="ErrorCircle12" Filled="True" Foreground="Red" 
-                                                       Visibility="{Binding VisibilityCompileError}"
-                                                       ToolTip="{Binding CompileErrors}"
-                                                       />
-                                    </StackPanel>
-                                </Grid>
-                                <Grid Grid.Column="1" MouseRightButtonUp="Grid_MouseRightButtonUp" >
+
+                                <Grid Grid.Column="0" MouseRightButtonUp="Grid_MouseRightButtonUp" >
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition ></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Row="0" Orientation="Vertical">
                                         <StackPanel Orientation="Horizontal">
+                                            <ui:SymbolIcon Symbol="ErrorCircle12" Filled="True" Foreground="Red" 
+                                                    Visibility="{Binding VisibilityCompileError}"
+                                                    ToolTip="{Binding CompileErrors}"
+                                            />
                                             <TextBlock Text="{Binding Name}" FontWeight="Bold" ></TextBlock>
                                             <ui:SymbolIcon Symbol="AddSquareMultiple16" Visibility="{Binding ProjectsVisibility}" ToolTip="Multiple projects" Filled="True" Foreground="Orange"/>
                                             <ui:SymbolIcon Symbol="StarOff12" ToolTip="Dummy project. (couldn't load original file)" Visibility="{Binding IsDummyProjectsVisibility}" Filled="True" Foreground="Red"/>
@@ -81,7 +76,7 @@
                                         </Expander>
                                     </Grid>
                                 </Grid>
-                                <Grid Grid.Column="2">
+                                <Grid Grid.Column="1">
                                     <StackPanel Orientation="Horizontal">
                                         <Button Name="tryRunProj" Click="tryRunProj_Click" IsEnabled="{Binding CanRun}" ToolTip="Try to compile and run (selected) project"  >
                                             <ui:SymbolIcon Symbol="Play16" Foreground="Green" Filled="True"/>
@@ -92,7 +87,7 @@
                                         <Button Name="openVS" Click="openVS_Click" ToolTip="Open in Visual Studio"      >
                                             <ui:SymbolIcon Symbol="OpenFolder48" Foreground="Purple" Filled="True"/>
                                         </Button>
-                                   
+
                                     </StackPanel>
                                 </Grid>
                             </Grid>
@@ -108,12 +103,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-            <GridSplitter Grid.Column="1"
-       HorizontalAlignment="Center"
-       Background="DarkGray" 
-ShowsPreview="True"
-Width="8"
-       />
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
             <Grid Grid.Column="2" Name="gridMiddleSolutions" DataContext="{Binding SelectedSolution.SelectedProject}"  >
                 <ListBox ItemsSource="{Binding Files}" SelectedItem="{Binding SelectedFile}" >
                     <ListBox.ItemTemplate>
@@ -133,12 +123,7 @@ Width="8"
                 </ListBox>
             </Grid>
 
-            <GridSplitter Grid.Column="3"
-       HorizontalAlignment="Center"
-       Background="DarkGray" 
-ShowsPreview="True"
-Width="8"
-       />
+            <GridSplitter Grid.Column="3" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
             <Grid Grid.Column="4" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
                 <avalonEdit:TextEditor  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="textEditor"
@@ -150,7 +135,7 @@ Width="8"
                                         />
             </Grid>
         </Grid>
-        <Grid Grid.Row="2" Name="gridFooter">
+        <Grid Grid.Row="2" Name="gridFooter" >
 
         </Grid>
     </Grid>
