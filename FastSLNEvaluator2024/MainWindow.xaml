@@ -36,7 +36,18 @@
                 <ColumnDefinition Width="12*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Name="gridLeftSolutions" >
-                <ListBox ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                        <ui:AutoSuggestBox Name="txbAutosuggesSearcher" PlaceholderText="Search..." Icon="Search12"
+                                           TextChanged="txbAutosuggesSearcher_TextChanged"
+                                           ></ui:AutoSuggestBox>
+                    <CheckBox Name="SearchCBInFiles" IsChecked="False" Visibility="Hidden">Also in files</CheckBox>
+                </StackPanel>
+                <ListBox Grid.Row="1" ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid>

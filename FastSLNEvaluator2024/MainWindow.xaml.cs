@@ -1,8 +1,10 @@
 ﻿using FastSLNEvaluator2024.ViewModels;
 using ICSharpCode.AvalonEdit;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Wpf.Ui.Controls;
 
 namespace FastSLNEvaluator2024
 {
@@ -40,19 +42,19 @@ namespace FastSLNEvaluator2024
                 allWindow.IsEnabled = true;
                 if (ViewModel.Solutions.Count() == 0)
                 {
-                    MessageBox.Show("Geen solutions (*.sln) in folder en subfolders gevonden.");
+                    System.Windows.MessageBox.Show("Geen solutions (*.sln) in folder en subfolders gevonden.");
                 }
             }
         }
 
         private void Grid_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            MessageBox.Show("Use me"); //om snel databinding errors te debuggen
+            System.Windows.MessageBox.Show("Use me"); //om snel databinding errors te debuggen
         }
 
         private void TestWelkeCompileren_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.Solutions.Count<5 ||MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            if (ViewModel.Solutions.Count<5 || System.Windows.MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             { 
                 foreach (var item in ViewModel.Solutions)
                 {
@@ -104,17 +106,22 @@ namespace FastSLNEvaluator2024
 
         private void tryRunProj_Click(object sender, RoutedEventArgs e)
         {
-            ((sender as Button).DataContext as SolutionVM).TryRun();
+            ((sender as System.Windows.Controls.Button).DataContext as SolutionVM).TryRun();
         }
 
         private void openExplore_Click(object sender, RoutedEventArgs e)
         {
-            ((sender as Button).DataContext as SolutionVM).OpenInExplorer();
+            ((sender as System.Windows.Controls.Button).DataContext as SolutionVM).OpenInExplorer();
         }
 
         private void openVS_Click(object sender, RoutedEventArgs e)
         {
-            ((sender as Button).DataContext as SolutionVM).OpenInVS();
+            ((sender as System.Windows.Controls.Button).DataContext as SolutionVM).OpenInVS();
+        }
+
+        private void txbAutosuggesSearcher_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ViewModel.FilterSolution(txbAutosuggesSearcher.Text, SearchCBInFiles.IsChecked.Value);
         }
     }
 }
