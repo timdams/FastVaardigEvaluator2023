@@ -20,6 +20,8 @@
                 <Menu DockPanel.Dock="Top">
                     <ui:MenuItem Header="_Load" Click="Load_MenuItem_Click"  >
                     </ui:MenuItem>
+                    <ui:MenuItem Header="_Unzip moodle archive" Click="MenuItemUnzipMoodleArchive_Click"  >
+                    </ui:MenuItem>
                     <ui:MenuItem Header="_Settings" Visibility="Hidden">
                     </ui:MenuItem>
                     <ui:MenuItem Header="_Test alle slns op compileren" Click="TestWelkeCompileren_Click"></ui:MenuItem>

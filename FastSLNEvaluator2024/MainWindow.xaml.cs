@@ -1,5 +1,7 @@
-﻿using FastSLNEvaluator2024.ViewModels;
+﻿using FastEvalCL;
+using FastSLNEvaluator2024.ViewModels;
 using ICSharpCode.AvalonEdit;
+using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,17 +35,22 @@ namespace FastSLNEvaluator2024
                 //TODO settings
                 //AllSettings.LastSelectedFolder = dlg.SelectedPath;
                 // AllSettings.SafeSettings();
-                allWindow.IsEnabled = false;
+                await ProcessSolutions(dlg.SelectedPath);
+            }
+        }
 
-                loadingRing.Visibility = Visibility.Visible;
-                //TODO projecten in achtergrond beginnen inladen op aparte thread 
-                await ViewModel.LoadSolutionsAsync(dlg.SelectedPath);
-                loadingRing.Visibility = Visibility.Collapsed;
-                allWindow.IsEnabled = true;
-                if (ViewModel.Solutions.Count() == 0)
-                {
-                    System.Windows.MessageBox.Show("Geen solutions (*.sln) in folder en subfolders gevonden.");
-                }
+        private async Task ProcessSolutions(string path)
+        {
+            allWindow.IsEnabled = false;
+
+            loadingRing.Visibility = Visibility.Visible;
+            //TODO projecten in achtergrond beginnen inladen op aparte thread 
+            await ViewModel.LoadSolutionsAsync(path);
+            loadingRing.Visibility = Visibility.Collapsed;
+            allWindow.IsEnabled = true;
+            if (ViewModel.Solutions.Count() == 0)
+            {
+                System.Windows.MessageBox.Show("Geen solutions (*.sln) in folder en subfolders gevonden.");
             }
         }
 
@@ -54,12 +61,12 @@ namespace FastSLNEvaluator2024
 
         private void TestWelkeCompileren_Click(object sender, RoutedEventArgs e)
         {
-            if (ViewModel.Solutions.Count<5 || System.Windows.MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-            { 
+            if (ViewModel.Solutions.Count < 5 || System.Windows.MessageBox.Show("Dit zal lang duren. Ben je zeker?", "Opgelet", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            {
                 foreach (var item in ViewModel.Solutions)
                 {
 
-                    Task.Run(()=>item.TestIfCompilesAndRun());
+                    Task.Run(() => item.TestIfCompilesAndRun());
                 }
             }
         }
@@ -122,6 +129,25 @@ namespace FastSLNEvaluator2024
         private void txbAutosuggesSearcher_TextChanged(object sender, TextChangedEventArgs e)
         {
             ViewModel.FilterSolution(txbAutosuggesSearcher.Text, SearchCBInFiles.IsChecked.Value);
+        }
+
+        private async void MenuItemUnzipMoodleArchive_Click(object sender, RoutedEventArgs e)
+        {
+            Ookii.Dialogs.Wpf.VistaOpenFileDialog dlg = new Ookii.Dialogs.Wpf.VistaOpenFileDialog();
+            dlg.Title = "Kies moodle archive";
+
+            if (dlg.ShowDialog() == true)
+            {
+                Ookii.Dialogs.Wpf.VistaFolderBrowserDialog dlgSource = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+                //TODO beschrijving duidelijker maken
+                dlgSource.Description = "Waar moet alles geunzipped worden (maakt een subfolder  op deze plek aan)";
+                if (dlgSource.ShowDialog() == true)
+                {
+                     MoodleOpdrachtUnpacker.UnpackAllOpdrachten(dlg.FileName, dlgSource.SelectedPath);
+
+                    await ProcessSolutions(dlgSource.SelectedPath);
+                }
+            }
         }
     }
 }
