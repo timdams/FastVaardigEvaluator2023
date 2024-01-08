@@ -11,7 +11,7 @@ namespace FastEvalCL
         public static List<SolutionModel> LoadAllSolutionsFromPath(string folderPath, bool tryFetchInfo = true) 
         {
             List<SolutionModel> result = new List<SolutionModel>();
-            var allPrograms= Directory.GetFiles(folderPath, "Program.cs", SearchOption.AllDirectories);
+            var allPrograms= Directory.GetFiles(folderPath, "*.cs", SearchOption.AllDirectories);
             foreach (var prog in allPrograms)
             {
                 result.Add(new SolutionModel(prog, tryFetchInfo));
