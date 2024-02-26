@@ -47,7 +47,7 @@
                         <ui:AutoSuggestBox Name="txbAutosuggesSearcher" PlaceholderText="Search..." Icon="Search12"
                                            TextChanged="txbAutosuggesSearcher_TextChanged"
                                            ></ui:AutoSuggestBox>
-                    <CheckBox Name="SearchCBInFiles" IsChecked="False" Visibility="Hidden">Also in files</CheckBox>
+                    <CheckBox Name="SearchCBInFiles" IsChecked="False" Visibility="Visible" Checked="SearchCBInFiles_Checked" Unchecked="SearchCBInFiles_Checked">Search in codefiles</CheckBox>
                 </StackPanel>
                 <ListBox Grid.Row="1" ItemsSource="{Binding Solutions}" SelectedItem="{Binding SelectedSolution}">
                     <ListBox.ItemTemplate>
@@ -126,7 +126,10 @@
                                     <RowDefinition/>
                                     <RowDefinition ></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <StackPanel Grid.Row="0">
+                                <StackPanel Orientation="Horizontal" Grid.Row="0">
+
+                                    <ui:SymbolIcon Symbol="DocumentSearch24" Visibility="{Binding HasSearchCode}" ToolTip="Contains searchtext you are looking for" Filled="True" Foreground="Orange"/>
+
                                     <TextBlock Text="{Binding FileName}" FontWeight="Bold" ></TextBlock>
                                 </StackPanel>
 

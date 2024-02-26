@@ -143,5 +143,15 @@ namespace FastSLNEvaluator2024.ViewModels
         {
             Process.Start("explorer.exe", path);
         }
+
+        internal bool ContainsCode(string textToSearch)
+        {
+            foreach (var project in projects)
+            {
+                if (project.ContainsCode(textToSearch))
+                    return true;
+            }
+            return false;
+        }
     }
 }

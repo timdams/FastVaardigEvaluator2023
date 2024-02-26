@@ -149,5 +149,10 @@ namespace FastSLNEvaluator2024
                 }
             }
         }
+
+        private void SearchCBInFiles_Checked(object sender, RoutedEventArgs e)
+        {
+            txbAutosuggesSearcher_TextChanged(this, null);
+        }
     }
 }

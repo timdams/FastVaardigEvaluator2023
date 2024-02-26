@@ -30,20 +30,38 @@ namespace FastSLNEvaluator2024.ViewModels
 
         }
 
-        public void FilterSolution(string textToSearch, bool alsoInFiles=false)
+        public void FilterSolution(string textToSearch, bool alsoInFiles = false)
         {
-            if (textToSearch != "")
+            if (textToSearch != "" && alsoInFiles == false)
             {
                 solutions.Clear();
                 //TODO scherper maken
                 List<SolutionVM> filter;
-                    
-                    filter= allSolutions
-                    .Where(
-                             p => p.Name.ToLower().Contains(textToSearch.ToLower())
-                            || p.StudentInfo.SorteerNaam.ToLower().Contains(textToSearch.ToLower())
-                          )
-                    .OrderBy(p => p.StudentInfo.SorteerNaam).ToList();
+
+                filter = allSolutions
+                .Where(
+                         p => p.Name.ToLower().Contains(textToSearch.ToLower())
+                        || p.StudentInfo.SorteerNaam.ToLower().Contains(textToSearch.ToLower())
+                      )
+                .OrderBy(p => p.StudentInfo.SorteerNaam).ToList();
+
+                foreach (var item in filter)
+                {
+                    solutions.Add(item);
+                }
+
+            }
+            else if (alsoInFiles == true && textToSearch.Length >= 3)
+            {
+                solutions.Clear();
+                //TODO scherper maken
+                List<SolutionVM> filter;
+
+                filter = allSolutions
+                .Where(
+                         p => p.ContainsCode(textToSearch.ToLower())
+                      )
+                .OrderBy(p => p.StudentInfo.SorteerNaam).ToList();
 
                 foreach (var item in filter)
                 {

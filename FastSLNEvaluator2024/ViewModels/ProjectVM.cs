@@ -52,5 +52,15 @@ namespace FastSLNEvaluator2024.ViewModels
                 SelectedFile = files.FirstOrDefault();
             }
         }
+
+        internal bool ContainsCode(string textToSearch)
+        {
+            foreach (var file in Files)
+            {
+                if (file.ContainsCode(textToSearch))
+                    return true;
+            }
+            return false;
+        }
     }
 }

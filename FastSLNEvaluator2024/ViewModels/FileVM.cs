@@ -4,7 +4,9 @@ using Microsoft.CodeAnalysis;
 namespace FastSLNEvaluator2024.ViewModels
 {
     using ICSharpCode.AvalonEdit.Document;
+    using System;
     using System.Diagnostics;
+    using System.Windows;
 
     public partial class FileVM : ObservableObject
 
@@ -22,7 +24,11 @@ namespace FastSLNEvaluator2024.ViewModels
         private TextDocument codeDocument;
         public TextDocument CodeDocument
         {
-            get { return codeDocument; }
+            get
+            {
+
+                return codeDocument;
+            }
             set
             {
                 if (codeDocument != value)
@@ -40,7 +46,7 @@ namespace FastSLNEvaluator2024.ViewModels
             fullPath = f.FilePath;
 
             codeDocument = new TextDocument();
-
+            LoadCode(); //TODO te zwaar?
         }
 
         internal void LoadCode()
@@ -51,5 +57,21 @@ namespace FastSLNEvaluator2024.ViewModels
             OnPropertyChanged("CodeDocument");
         }
 
+
+
+        [ObservableProperty]
+        private Visibility hasSearchCode = Visibility.Collapsed;
+
+
+        internal bool ContainsCode(string textToSearch)
+        {
+            if (Code.ToLower().Contains(textToSearch.ToLower()))
+            {
+                hasSearchCode = Visibility.Visible;
+                return true;
+            }
+            hasSearchCode = Visibility.Collapsed;
+            return false;
+        }
     }
 }
