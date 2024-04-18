@@ -33,19 +33,19 @@ namespace FastEvalCL
             var lines = code.Split(Environment.NewLine);
             foreach (var line in lines)
             {
-                if (line.Trim().StartsWith("//S-nummer"))
+                if (line.Trim().ToLower().StartsWith("//s-nummer"))
                 {
                     resultInfo.SNummer = line.Split(":").LastOrDefault().Trim();
                 }
-                else if (line.Trim().StartsWith("//Voornaam"))
+                else if (line.Trim().ToLower().StartsWith("//voornaam"))
                 {
                     resultInfo.VoorNaam = line.Split(":").LastOrDefault().Trim();
                 }
-                else if (line.Trim().StartsWith("//Achternaam"))
+                else if (line.Trim().ToLower().StartsWith("//achternaam"))
                 {
                     resultInfo.AchterNaam = line.Split(":").LastOrDefault()?.Trim();
                 }
-                else if (line.Trim().StartsWith("//Klasgroep"))
+                else if (line.Trim().ToLower().StartsWith("//klasgroep"))
                 {
                     resultInfo.Klasgroep = line.Split(":").LastOrDefault().Trim();
                 }

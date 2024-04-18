@@ -154,5 +154,6 @@ namespace FastSLNEvaluator2024
         {
             txbAutosuggesSearcher_TextChanged(this, null);
         }
+
     }
 }

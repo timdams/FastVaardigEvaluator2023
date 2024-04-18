@@ -73,7 +73,7 @@
                                             <ui:SymbolIcon Symbol="AddSquareMultiple16" Visibility="{Binding ProjectsVisibility}" ToolTip="Multiple projects" Filled="True" Foreground="Orange"/>
                                             <ui:SymbolIcon Symbol="StarOff12" ToolTip="Dummy project. (couldn't load original file)" Visibility="{Binding IsDummyProjectsVisibility}" Filled="True" Foreground="Red"/>
                                         </StackPanel>
-                                        <TextBlock Text="{Binding StudentInfo.AchterNaam}" ToolTip="{Binding StudentInfo.SorteerNaam}"  ></TextBlock>
+                                        <TextBlock Text="{Binding StudentInfo.SorteerNaam}" ToolTip="{Binding StudentInfo.Klasgroep}"   ></TextBlock>
                                         <TextBlock Text="{Binding ShortPath}" ToolTip="{Binding Path}"  ></TextBlock>
                                     </StackPanel>
 
@@ -141,6 +141,7 @@
 
             <GridSplitter Grid.Column="3" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
             <Grid Grid.Column="4" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
+
                 <avalonEdit:TextEditor  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="textEditor"
                                         FontFamily="Consolas"
@@ -149,6 +150,7 @@
                                         Document="{Binding Path=CodeDocument}"
                                         PreviewMouseWheel="textEditor_PreviewMouseWheel"
                                         />
+
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Name="gridFooter" >
