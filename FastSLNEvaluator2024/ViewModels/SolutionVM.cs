@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using FastEvalCL;
+using FastEvalCL.Evaluatie;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -37,6 +38,9 @@ namespace FastSLNEvaluator2024.ViewModels
 
         [ObservableProperty]
         private StudentInfo studentInfo = new StudentInfo();
+
+        [ObservableProperty]
+        private EvaluatieRapport evaluatieRapport = new EvaluatieRapport();
 
         public Visibility ProjectsVisibility
         {
@@ -96,10 +100,13 @@ namespace FastSLNEvaluator2024.ViewModels
             }
 
             //punten/status inladen
-            if (System.IO.File.Exists(System.IO.Path.Combine(ContainingFolderPath, "punten.json")))
+            if (System.IO.File.Exists(System.IO.Path.Combine(ContainingFolderPath, "done.json")))
             {
                 IsDone = true;
             }
+
+            evaluatieRapport.LaadRapport(System.IO.Path.Combine(ContainingFolderPath, "rapport.json"));
+            
         }
 
         [ObservableProperty]
@@ -184,8 +191,8 @@ namespace FastSLNEvaluator2024.ViewModels
             set
             {
                 isDone = value;
-                if(isDone )
-                    System.IO.File.CreateText(System.IO.Path.Combine(ContainingFolderPath, "punten.json"));
+                if(isDone)
+                    System.IO.File.CreateText(System.IO.Path.Combine(ContainingFolderPath, "done.json"));
                 OnPropertyChanged("IsDone");
             }
         }

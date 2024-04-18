@@ -148,7 +148,7 @@ public class SolutionHelper
                 versionText = "5.0.0";
                 break;
             default:
-                break;
+                break;            
         }
 
         string configText = @"
