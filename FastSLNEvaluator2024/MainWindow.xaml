@@ -74,7 +74,7 @@
                                             <ui:SymbolIcon Symbol="StarOff12" ToolTip="Dummy project. (couldn't load original file)" Visibility="{Binding IsDummyProjectsVisibility}" Filled="True" Foreground="Red"/>
                                         </StackPanel>
                                         <TextBlock Text="{Binding StudentInfo.SorteerNaam}" ToolTip="{Binding StudentInfo.Klasgroep}"   ></TextBlock>
-                                        <TextBlock Text="{Binding ShortPath}" ToolTip="{Binding Path}"  ></TextBlock>
+                                        <TextBlock Text="{Binding ShortPath}" ToolTip="{Binding SlnPath}"  ></TextBlock>
                                     </StackPanel>
 
                                     <Grid Visibility="{Binding ProjectsVisibility}" Grid.Row="1">
@@ -100,7 +100,7 @@
                                         <Button Name="openVS" Click="openVS_Click" ToolTip="Open in Visual Studio"      >
                                             <ui:SymbolIcon Symbol="OpenFolder48" Foreground="Purple" Filled="True"/>
                                         </Button>
-
+                                        <ui:ToggleSwitch IsChecked="{Binding IsDone }" >Done</ui:ToggleSwitch>
                                     </StackPanel>
                                 </Grid>
                             </Grid>
@@ -141,8 +141,15 @@
 
             <GridSplitter Grid.Column="3" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
             <Grid Grid.Column="4" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
-
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Name="puntenGrid">
+                    
+                </Grid>
                 <avalonEdit:TextEditor  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                                        Grid.Row="1"
                                         Name="textEditor"
                                         FontFamily="Consolas"
                                         SyntaxHighlighting="C#"

@@ -10,12 +10,21 @@ namespace FastSLNEvaluator2024.ViewModels
     public partial class SolutionVM : ObservableObject
     {
         [ObservableProperty]
-        private string? path;
+        private string? slnPath;
 
         public string ShortPath
         {
-            get { return System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(path)); }
+            get { return System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(slnPath)); }
         }
+
+        public string ContainingFolderPath
+        {
+            get
+            {
+                return System.IO.Path.GetDirectoryName(slnPath);
+            }
+        }
+
 
         [ObservableProperty]
         private string? name;
@@ -53,7 +62,7 @@ namespace FastSLNEvaluator2024.ViewModels
         public SolutionVM(Microsoft.CodeAnalysis.Solution singeSln)
         {
 
-            path = singeSln.FilePath;
+            slnPath = singeSln.FilePath;
 
             //TODO dummy info naar ui brengen
             projects.Clear();
@@ -65,7 +74,7 @@ namespace FastSLNEvaluator2024.ViewModels
 
             if (selectedProject != null)
                 name = selectedProject.Name;
-            else name = "NO PROJECT FOUND HERE:" + path;
+            else name = "NO PROJECT FOUND HERE:" + slnPath;
 
             LoadAdditionalInfo();
         }
@@ -85,9 +94,19 @@ namespace FastSLNEvaluator2024.ViewModels
                 }
 
             }
+
+            //punten/status inladen
+            if (System.IO.File.Exists(System.IO.Path.Combine(ContainingFolderPath, "punten.json")))
+            {
+                IsDone = true;
+            }
         }
+
         [ObservableProperty]
         private bool canRun = true;
+
+     
+
 
         [ObservableProperty]
         private Visibility visibilityCompileError = Visibility.Collapsed;
@@ -136,12 +155,12 @@ namespace FastSLNEvaluator2024.ViewModels
 
         internal void OpenInExplorer()
         {
-            Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(path));
+            Process.Start("explorer.exe", System.IO.Path.GetDirectoryName(slnPath));
         }
 
         internal void OpenInVS()
         {
-            Process.Start("explorer.exe", path);
+            Process.Start("explorer.exe", slnPath);
         }
 
         internal bool ContainsCode(string textToSearch)
@@ -153,5 +172,23 @@ namespace FastSLNEvaluator2024.ViewModels
             }
             return false;
         }
+
+
+
+        public bool IsDone
+        {
+            get
+            {
+                return isDone;
+            }
+            set
+            {
+                isDone = value;
+                if(isDone )
+                    System.IO.File.CreateText(System.IO.Path.Combine(ContainingFolderPath, "punten.json"));
+                OnPropertyChanged("IsDone");
+            }
+        }
+        private bool isDone = false;
     }
 }
