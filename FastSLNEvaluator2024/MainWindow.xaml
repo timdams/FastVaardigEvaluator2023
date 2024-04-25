@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
-        Title="AP OOP Solution Navigator" Height="900" Width="1300"   >
+        Title="FastSLNEvaluator 2024" Height="900" Width="1300"   >
     <Grid Name="allWindow" >
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -25,6 +25,7 @@
                     <ui:MenuItem Header="_Settings" Visibility="Hidden">
                     </ui:MenuItem>
                     <ui:MenuItem Header="_Test alle slns op compileren" Click="TestWelkeCompileren_Click"></ui:MenuItem>
+                    <ui:MenuItem Header="About" Click="ShowAboutMenu"></ui:MenuItem>
                 </Menu>
             </DockPanel>
         </Grid>

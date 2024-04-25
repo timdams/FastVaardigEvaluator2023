@@ -1,0 +1,17 @@
+﻿<Window x:Class="FastSLNEvaluator2024.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FastSLNEvaluator2024"
+        mc:Ignorable="d"
+        Title="About" Height="150" Width="400">
+    <Grid>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+            <Image Source="logosmall.ico" Width="50"></Image>
+            <TextBlock TextWrapping="Wrap">Meer info op: https://github.com/timdams/FastVaardigEvaluator2023</TextBlock>
+            <TextBlock TextWrapping="Wrap">Geschreven door en voor Tim Dams</TextBlock>
+            <Button Name="btnClose" HorizontalAlignment="Center" Click="btnClose_Click">OK</Button>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -163,5 +163,10 @@ namespace FastSLNEvaluator2024
             txbAutosuggesSearcher_TextChanged(this, null);
         }
 
+        private void ShowAboutMenu(object sender, RoutedEventArgs e)
+        {
+            AboutWindow about = new AboutWindow();
+            about.ShowDialog();
+        }
     }
 }
