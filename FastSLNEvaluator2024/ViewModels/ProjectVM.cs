@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace FastSLNEvaluator2024.ViewModels
 {
@@ -42,7 +43,17 @@ namespace FastSLNEvaluator2024.ViewModels
             foreach (Microsoft.CodeAnalysis.Document f in project.Documents)
             {
                 if (!f.FilePath.Contains(@"\obj\Debug\")) //TODO elders definieren (settings?)
-                    files.Add(new FileVM(f));
+                {
+                    try
+                    {
+                        files.Add(new FileVM(f));
+                    }
+                    catch (Exception)
+                    {
+
+                        MessageBox.Show($"Fout bij inladen van bestand {f.FilePath} van project {name}, folder {project.FilePath}");
+                    }
+                }
 
 
             }

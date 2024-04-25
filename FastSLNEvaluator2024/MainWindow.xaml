@@ -142,13 +142,13 @@
 
             <GridSplitter Grid.Column="3" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
             <Grid Grid.Column="4" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
-                <Grid.RowDefinitions>
+                <!--<Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid Name="puntenGrid" DataContext="{Binding ElementName=lbSollist, Path=DataContext.SelectedSolution}" Grid.Row="0">
                     <ListBox ItemsSource="{Binding EvaluatieRapport.Evaluaties}"  ></ListBox>
-                </Grid>
+                </Grid>-->
                 <avalonEdit:TextEditor Grid.Row="1"  xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
                                         Name="textEditor"
                                         FontFamily="Consolas"

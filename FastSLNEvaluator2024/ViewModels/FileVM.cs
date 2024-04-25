@@ -46,7 +46,15 @@ namespace FastSLNEvaluator2024.ViewModels
             fullPath = f.FilePath;
 
             codeDocument = new TextDocument();
-            LoadCode(); //TODO te zwaar?
+            try
+            {
+                LoadCode(); //TODO te zwaar?
+            }
+            catch (Exception)
+            {
+
+                throw new Exception($"Could not load file {fullPath}");
+            } 
         }
 
         internal void LoadCode()

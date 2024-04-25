@@ -35,7 +35,15 @@ namespace FastSLNEvaluator2024
                 //TODO settings
                 //AllSettings.LastSelectedFolder = dlg.SelectedPath;
                 // AllSettings.SafeSettings();
-                await ProcessSolutions(dlg.SelectedPath);
+                try
+                {
+                    await ProcessSolutions(dlg.SelectedPath);
+                }
+                catch (Exception ex)
+                {
+
+                    System.Windows.MessageBox.Show(ex.Message, "Dikke error", MessageBoxButton.OK, MessageBoxImage.Error) ;
+                } 
             }
         }
 
