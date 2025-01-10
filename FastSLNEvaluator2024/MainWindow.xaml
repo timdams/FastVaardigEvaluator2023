@@ -26,26 +26,28 @@
                     </ui:MenuItem>
                     <ui:MenuItem Header="_Test alle slns op compileren" Click="TestWelkeCompileren_Click"></ui:MenuItem>
                     <ui:MenuItem Header="About" Click="ShowAboutMenu"></ui:MenuItem>
+                    <ui:MenuItem Header="SolutionPanel" Name="btnSolPanel" Click="btnSolPanel_Click"></ui:MenuItem>
                 </Menu>
             </DockPanel>
         </Grid>
         <ui:ProgressRing IsIndeterminate="True" Grid.Row="1" Visibility="Hidden" Name="loadingRing" />
         <Grid Grid.Row="1" Name="gridMain">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="338*"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="135*"></ColumnDefinition>
                 <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition Width="12*"></ColumnDefinition>
+                <ColumnDefinition Width="575*"></ColumnDefinition>
+                <ColumnDefinition Width="236*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Name="gridLeftSolutions" >
+            <Grid Grid.Column="0" Name="gridLeftSolutions" Grid.ColumnSpan="2" Margin="0,0,8,0" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
-                    
+
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                        <ui:AutoSuggestBox Name="txbAutosuggesSearcher" PlaceholderText="Search..." Icon="Search12"
+                    <ui:AutoSuggestBox Name="txbAutosuggesSearcher" PlaceholderText="Search..." Icon="Search12"
                                            TextChanged="txbAutosuggesSearcher_TextChanged"
                                            ></ui:AutoSuggestBox>
                     <CheckBox Name="SearchCBInFiles" IsChecked="False" Visibility="Visible" Checked="SearchCBInFiles_Checked" Unchecked="SearchCBInFiles_Checked">Search in codefiles</CheckBox>
@@ -116,7 +118,7 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-  
+
             </Grid>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
             <Grid Grid.Column="2" Name="gridMiddleSolutions" DataContext="{Binding SelectedSolution.SelectedProject}"  >
@@ -142,7 +144,7 @@
             </Grid>
 
             <GridSplitter Grid.Column="3" HorizontalAlignment="Center" Background="DarkGray" ShowsPreview="True" Width="8"       />
-            <Grid Grid.Column="4" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}">
+            <Grid Grid.Column="3" Name="gridRightSolutions" DataContext="{Binding SelectedSolution.SelectedProject.SelectedFile}" Grid.ColumnSpan="3" Margin="8,0,0,0">
                 <!--<Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>

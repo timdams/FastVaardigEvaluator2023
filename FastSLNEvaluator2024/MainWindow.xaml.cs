@@ -1,5 +1,6 @@
 ﻿using FastEvalCL;
 using FastSLNEvaluator2024.ViewModels;
+using FastSLNEvaluator2024.Windows;
 using ICSharpCode.AvalonEdit;
 using Ookii.Dialogs.Wpf;
 using System.Diagnostics;
@@ -167,6 +168,12 @@ namespace FastSLNEvaluator2024
         {
             AboutWindow about = new AboutWindow();
             about.ShowDialog();
+        }
+
+        private void btnSolPanel_Click(object sender, RoutedEventArgs e)
+        {
+            var windows = new OplossingsWindow();
+            windows.Show();
         }
     }
 }
